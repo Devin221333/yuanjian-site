@@ -1570,8 +1570,37 @@
     }
   }
 
-  async function renderMarketContext() {
+  async function renderMarketContext(result) {
     if (!$('#market-context-time') || !$('#market-rationale')) return;
+    const { answers, profile } = result;
+    const horizonText = textMaps.horizon[answers.horizon] || '';
+    const emergencyText = { under3: '不到 3 个月', threeToSix: '3–6 个月', sixToTwelve: '6–12 个月', overTwelve: '12 个月以上' }[answers.emergency] || '';
+    const drawdownText = { five: '约 5%', ten: '约 10%', twenty: '约 20%', thirty: '约 30%', forty: '40% 以上' }[answers.drawdown] || '';
+    // 压力情景形如“约 -18% 至 -28%”，取较小的那个跌幅做对比
+    const stressFloor = Math.min(...(String(profile.stress).match(/\d+(\.\d+)?/g) || ['0']).map(Number));
+    const reasons = (move) => {
+      let volatility = `设计“${profile.name}”时，已经预期整个组合在不利的年份可能出现${profile.stress}的波动，短期涨跌本来就在计划之内。`;
+      if (Number.isFinite(move)) {
+        const moveText = `沪深 300 近 20 个交易日${move >= 0 ? '上涨' : '下跌'} ${Math.abs(move).toFixed(2)}%`;
+        volatility += Math.abs(move) < stressFloor
+          ? `${moveText}，这是单个市场一个月的变化，幅度小于这个预期。`
+          : `${moveText}，幅度已经不小，可以按第 3 条检查自己的持仓是否偏离目标。`;
+      }
+      return [
+        ['比例由你的情况决定', `你的比例取决于投资期限（${horizonText}）、应急金（${emergencyText}）和能承受的一年最大跌幅（${drawdownText}）。上面的行情数字没有改变其中任何一项。`],
+        ['这类波动已经算进去了', volatility],
+        ['什么时候才需要调整', `${profile.review}。要不要调整，看的是你自己的持仓比例，而不是某个指数的涨跌；只有期限、用钱计划或应急金变了，才需要重新回答问题。`]
+      ];
+    };
+    const renderReasons = (move) => {
+      const list = $('#market-reasons');
+      if (!list) return;
+      list.replaceChildren(...reasons(move).map(([title, body]) => {
+        const item = makeElement('li');
+        item.append(makeElement('strong', '', title), makeElement('span', '', body));
+        return item;
+      }));
+    };
     try {
       const response = await fetch('data/market-details.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('market data unavailable');
@@ -1580,14 +1609,16 @@
       const aShare = byId['a-share'].headline;
       const fx = byId.fx.headline;
       const globalRisk = byId['global-risk'].headline;
+      // marketContext 由 update_market.py 按当天数据生成；没有时只列数字
+      const context = typeof data.marketContext === 'object' && data.marketContext ? data.marketContext : {};
+      const text = context.text || `沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。`;
       $('#market-context-time').textContent = `${data.updatedAt} · ${data.timezone}`;
-      // marketContext 由 update_market.py 按当天数据判断后生成；没有时只列数字，不写判断
-      const text = String(data.marketContext || '').replace(/^当前公开数据：/, '')
-        || `沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。这些是短期市场变化，只用来提醒你检查分散和期限，不会自动改写你的战略比例。`;
       $('#market-rationale').replaceChildren(makeElement('strong', '', '当前公开数据：'), document.createTextNode(text));
+      renderReasons(Number.isFinite(context.csi300Change20d) ? context.csi300Change20d : NaN);
     } catch (_) {
       $('#market-context-time').textContent = '数据暂不可用';
-      $('#market-rationale').innerHTML = '<strong>市场环境暂未载入：</strong>你的战略比例仍由期限、现金需求和风险边界决定，不依赖某一天的行情。';
+      $('#market-rationale').replaceChildren(makeElement('strong', '', '市场数据暂未载入：'), document.createTextNode('不影响下面的判断。'));
+      renderReasons(NaN);
     }
   }
 
@@ -1785,6 +1816,7 @@
         renderAllocation(result);
         track('组合', '查看', result.profile.name);
         renderBacktestNote(result);
+        renderMarketContext(result);
       }
       if (allocationPage === 'review') {
         if (!hasCompletedQuiz()) {
@@ -1802,5 +1834,4 @@
   }
 
   initAllocation();
-  if (allocationPage === 'portfolio') renderMarketContext();
 })();

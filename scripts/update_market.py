@@ -559,9 +559,10 @@ def market_observations(markets, history):
                                          f"{abs(turnover):.0f}%。成交额反映交易活跃程度，本身不是买卖信号。")))
     result["a-share"] = pick(cands, ("big", "streak", "turnover", "same", "month", "level"), EVERGREEN_SIGNALS["a-share"])
     month = change_over(csi)
+    csi_month_pct = round((month[2] / month[1] - 1) * 100, 2) if month else None
     a_text = f"沪深 300 {metric_value(a_share, '沪深 300')}（{metric_change(a_share, '沪深 300')}）"
     if month:
-        a_text += f"，近 20 个交易日{describe_move(f'{(month[2] / month[1] - 1) * 100}%')}"
+        a_text += f"，近 20 个交易日{describe_move(f'{csi_month_pct}%')}"
     context.append(a_text)
 
     # ---- 港股
@@ -649,8 +650,8 @@ def market_observations(markets, history):
     result["global-risk"] = pick(cands, ("ust", "oil", "ust-level", "oil-level"), EVERGREEN_SIGNALS["global-risk"])
     context.append(ust_text)
 
-    note = ("当前公开数据：" + "；".join(context) + "。"
-            "这些是短期市场变化，只用来提醒你检查分散和期限，不会自动改写你的战略比例。")
+    # 组合页“今天的行情会改变这个比例吗？”：数据句子 + 供页面对比用的近 20 日涨跌幅（理由部分由 app.js 结合用户答案生成）
+    note = {"text": "；".join(context) + "。", "csi300Change20d": csi_month_pct}
     return result, note
 
 

@@ -3252,3 +3252,47 @@ footer a { color: inherit; text-decoration: underline; text-underline-offset: 3p
 .privacy-page .ad-section { margin-bottom: 14px; }
 .privacy-page .ad-section p { margin: 0 0 8px; color: #4f667a; line-height: 1.7; }
 .privacy-page { padding-bottom: 20px; }
+
+/* v26：组合页“今天的行情会改变这个比例吗？”——明确列出三条理由
+   电脑端三条并排；手机端上下排列、编号在左 */
+.context-reasons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  counter-reset: reason;
+}
+.context-reasons:empty { display: none; }
+.context-reasons li {
+  position: relative;
+  padding: 14px 14px 14px 44px;
+  border: 1px solid #d8e8ea;
+  border-radius: 9px;
+  background: #fff;
+  counter-increment: reason;
+}
+.context-reasons li::before {
+  content: counter(reason);
+  position: absolute;
+  top: 13px;
+  left: 14px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1b2f45;
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+}
+.context-reasons strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: .86rem; }
+.context-reasons span { display: block; color: #4f687b; font-size: .8rem; line-height: 1.65; }
+
+@media (max-width: 900px) {
+  .context-reasons { grid-template-columns: 1fr; gap: 8px; }
+  .context-reasons li { padding: 12px 12px 12px 40px; }
+  .context-reasons li::before { top: 12px; left: 12px; }
+}
