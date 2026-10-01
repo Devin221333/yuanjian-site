@@ -25,15 +25,16 @@
 ## 待办：让自动更新真正跑起来
 1. ✅ 已于 2026-10-01 验证 `python scripts/update_market.py --check`，所有数据源可用：
    - A 股 / 港股指数改为腾讯行情 qt.gtimg.cn 为主、东方财富为备用（东方财富 push2 从海外网络测试时持续 502，GitHub Actions 也在海外，需在首次运行时确认）。
-   - 美国财政部收益率 CSV、外汇交易中心 ccpr.json（字段 vrtEName / price 已确认）、FRED 原油均正常。
+   - 美国财政部收益率 CSV、外汇交易中心 ccpr.json（字段 vrtEName / price 已确认）正常；油价见第 3 条。
    - 收盘日期取自行情返回的时间，不再用运行当天；数值没变的项不算更新，休市日不会产生空提交。
    - 免费模式：update_market.py 会按当天数字用模板重写各市场 summary，并使用长期适用的 signals，不调用 API。
 2. （可选，会产生 API 费用，目前不启用）设置 `ANTHROPIC_API_KEY` 后运行 `python scripts/update_commentary.py --check`，检查生成的新闻和解读质量、链接真实性。
-3. 建 GitHub 仓库，推送代码，在 Actions 页面手动运行一次工作流（不添加 `ANTHROPIC_API_KEY` 也能跑，文字解读一步会自动跳过）。
-   注意：首页 data/news.json 的新闻和“今日主线”只有启用 API 后才会更新，免费模式下保持手写内容。
-4. 根据网站托管位置配置发布：
-   - Cloudflare Pages / Netlify / Vercel 等可直接连 GitHub 自动部署；
-   - 国内云（需 ICP 备案）在工作流末尾加上传步骤（ossutil / coscmd / rsync）。
+3. ✅ 2026-10-01 已上线：仓库 https://github.com/Devin221333/yuanjian-site （公开），工作流已手动跑通并自动提交数据。
+   未添加 `ANTHROPIC_API_KEY`（用户暂不付费），文字解读一步自动跳过。
+   首页 data/news.json 的新闻和“今日主线”只有启用 API 后才会更新，免费模式下保持手写内容。
+   在 GitHub Actions 上：FRED 访问超时，所以油价用新浪国际期货 hf_OIL / hf_CL；腾讯、外汇中心、美国财政部正常。
+4. ✅ GitHub Pages 已开启：https://devin221333.github.io/yuanjian-site/ （main 分支根目录，数据提交后自动重新发布）。
+   面向内地用户长期使用时，github.io 在国内访问不稳定，届时需国内云 + ICP 备案，并在工作流末尾加上传步骤（ossutil / coscmd / rsync）。
 5. 历史数据 data/historical-analysis.json 目前是手工生成的，可另写脚本按月更新。
 
 ## 其他
