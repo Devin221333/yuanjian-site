@@ -72,14 +72,19 @@
       ],
       "sources": [
         {
-          "name": "新华财经：9 月 30 日 A 股收评",
-          "url": "https://m.cnfin.com/yw-lb/zixun/20260930/4476748_1.html",
-          "type": "权威财经媒体"
+          "name": "上海证券交易所",
+          "url": "https://www.sse.com.cn/",
+          "type": "交易所官方"
         },
         {
-          "name": "行情明细：沪深主要指数与成交额",
-          "url": "https://stock.cngold.org/c/2026-09-30/c10791123.html",
-          "type": "市场数据整理"
+          "name": "深圳证券交易所",
+          "url": "https://www.szse.cn/",
+          "type": "交易所官方"
+        },
+        {
+          "name": "腾讯财经行情（本页指数数据来源）",
+          "url": "https://gu.qq.com/",
+          "type": "行情数据"
         }
       ]
     },
@@ -152,14 +157,19 @@
       ],
       "sources": [
         {
-          "name": "新浪财经：9 月 30 日港股 ETF 日报",
-          "url": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-09-30/doc-initqzkv6888165.shtml",
-          "type": "财经媒体"
+          "name": "恒生指数公司",
+          "url": "https://www.hsi.com.hk/schi/",
+          "type": "指数官方"
         },
         {
-          "name": "恒生指数公司：指数资料",
-          "url": "https://www.hsi.com.hk/chs/indexes/all-indexes",
-          "type": "指数官方"
+          "name": "香港交易所",
+          "url": "https://www.hkex.com.hk/?sc_lang=zh-HK",
+          "type": "交易所官方"
+        },
+        {
+          "name": "腾讯财经行情（本页指数数据来源）",
+          "url": "https://gu.qq.com/",
+          "type": "行情数据"
         }
       ]
     },
@@ -233,9 +243,9 @@
       ],
       "sources": [
         {
-          "name": "新华社：中国外汇交易中心 9 月 30 日中间价",
-          "url": "https://www.xinhuanet.com/fortune/20260930/c02e15ec5d824c5c996d962d598d45be/c.html",
-          "type": "官方授权发布"
+          "name": "中国外汇交易中心：人民币汇率中间价",
+          "url": "https://www.chinamoney.com.cn/chinese/bkccpr/",
+          "type": "官方发布"
         },
         {
           "name": "Frankfurter 汇率接口",
@@ -307,18 +317,18 @@
       "sources": [
         {
           "name": "美国财政部：每日国债收益率",
-          "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026&type=daily_treasury_yield_curve",
+          "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve",
           "type": "政府官方"
         },
         {
-          "name": "Fortune：9 月 30 日 Brent 价格快照",
-          "url": "https://fortune.com/article/price-of-oil-09-30-2026/",
-          "type": "财经媒体"
+          "name": "新浪财经：国际原油期货行情",
+          "url": "https://finance.sina.com.cn/futuremarket/",
+          "type": "行情数据"
         },
         {
-          "name": "Reuters 转引：Brent 与 WTI 盘中价格",
-          "url": "https://gvwire.com/2026/09/30/oil-prices-rise-on-stalled-us-iran-talks-and-tight-fuel-markets/",
-          "type": "Reuters 报道"
+          "name": "FRED：Brent 原油现货价（备用来源）",
+          "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+          "type": "公开参考数据"
         }
       ]
     }

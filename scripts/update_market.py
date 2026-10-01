@@ -19,7 +19,8 @@
     （东方财富在海外机房（含 GitHub Actions）经常返回 502）。
   * 美债 10 年：美国财政部收益率 CSV，失败回退 FRED DGS10。
   * 人民币中间价：中国外汇交易中心 ccpr.json（字段 vrtEName / price）。
-  * 原油：FRED DCOILBRENTEU / DCOILWTICO，通常滞后数个交易日。
+  * 原油：新浪财经国际期货近月合约 hf_OIL / hf_CL 为主；失败时用 FRED 现货价
+    （FRED 在 GitHub Actions 上访问超时，现货价也通常滞后数个交易日）。
 """
 import csv
 import io
@@ -159,6 +160,27 @@ def fetch_fred(series_id):
     rows = [r for r in rows if len(r) == 2 and r[1] not in ("", ".")]
     date, value = rows[-1]
     return {"value": float(value), "date": date, "source": "fred"}
+
+
+# 新浪财经外盘期货：以逗号分隔，[0]=最新价 [6]=时间 [7]=昨结算 [12]=日期（北京时间）
+SINA_OIL = {"Brent 原油": ("hf_OIL", "DCOILBRENTEU"), "WTI 原油": ("hf_CL", "DCOILWTICO")}
+
+
+def fetch_sina_oil():
+    codes = ",".join(code for code, _ in SINA_OIL.values())
+    text = http_get(f"https://hq.sinajs.cn/list={codes}", referer="https://finance.sina.com.cn/", encoding="gbk")
+    out = {}
+    for line in text.splitlines():
+        if "=" not in line:
+            continue
+        name, _, raw = line.partition("=")
+        f = raw.strip().strip(';"').split(",")
+        if len(f) < 13 or not f[0]:
+            continue
+        price, prev = float(f[0]), float(f[7] or 0)
+        out[name.removeprefix("var hq_str_")] = {"value": price, "pct": (price / prev - 1) * 100 if prev else 0.0,
+                                                  "date": f[12], "time": f[6][:5]}
+    return out
 
 
 def fetch_cny_midpoint():
@@ -310,7 +332,7 @@ def refresh_summaries(markets):
                     else "油价偏低，通胀压力相对缓和" if brent < 60 else "油价处在中等区间")
         risk["summary"] = (
             f"美国 10 年期国债收益率最新为 {ust:.2f}%（{risk['headline']['asOf']}），"
-            f"Brent 原油约 {metric_value(risk, 'Brent 原油')}、WTI 约 {metric_value(risk, 'WTI 原油')}（油价数据通常滞后几天）。"
+            f"Brent 原油约 {metric_value(risk, 'Brent 原油')}、WTI 约 {metric_value(risk, 'WTI 原油')}（油价为国际原油期货近月合约或现货的最近可得价格）。"
             f"{rate_view}；{oil_view}。这些是对风险环境的观察，不是涨跌预测。"
         )
 
@@ -396,15 +418,27 @@ def main():
             changed.append("美债 10 年")
     except Exception as error:  # noqa: BLE001
         log(f"[ust10y] 失败：{error}")
-    for series, label in (("DCOILBRENTEU", "Brent 原油"), ("DCOILWTICO", "WTI 原油")):
+    try:
+        sina_oil = fetch_sina_oil()
+        log(f"[sina-oil] {sina_oil}")
+    except Exception as error:  # noqa: BLE001
+        sina_oil = {}
+        log(f"[sina-oil] 失败，改用 FRED：{error}")
+    for label, (code, series) in SINA_OIL.items():
         try:
-            oil = fetch_fred(series)
-            log(f"[{series}] {oil}")
-            if set_metric(market, label, f"${oil['value']:.2f} / 桶", "FRED 最近可得", "risk", "oil", oil["value"],
-                          note=f"{oil['date']} 现货价，通常滞后数个交易日"):
+            if code in sina_oil:
+                oil = sina_oil[code]
+                ok = set_metric(market, label, f"${oil['value']:.2f} / 桶", fmt_pct(oil["pct"]), "risk", "oil", oil["value"],
+                                note=f"国际期货近月合约，{oil['date']} {oil['time']}（北京时间）")
+            else:
+                oil = fetch_fred(series)
+                log(f"[{series}] {oil}")
+                ok = set_metric(market, label, f"${oil['value']:.2f} / 桶", "FRED 最近可得", "risk", "oil", oil["value"],
+                                note=f"{oil['date']} 现货价，通常滞后数个交易日")
+            if ok:
                 changed.append(label)
         except Exception as error:  # noqa: BLE001
-            log(f"[{series}] 失败：{error}")
+            log(f"[{label}] 失败：{error}")
     # 旧版的「Brent 12 月合约」快照无法自动更新，删除以免过期
     market["metrics"] = [m for m in market["metrics"] if m["label"] != "Brent 12 月合约"]
 
