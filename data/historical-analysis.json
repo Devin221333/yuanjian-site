@@ -1,0 +1,2229 @@
+{
+  "updatedAt": "2026-09-30",
+  "targetWindow": {
+    "start": "2016-09-30",
+    "end": "2026-09-30",
+    "label": "目标观察窗：过去 10 年"
+  },
+  "commonWindow": {
+    "start": "2017-10-31",
+    "end": "2026-09-30",
+    "months": 108,
+    "years": 8.9,
+    "reason": "组合回测采用所有代表工具都有数据的共同区间；REITs 代表基金成立较晚，因此不足完整 10 年。"
+  },
+  "recentWindows": [
+    {
+      "id": "long",
+      "label": "长期层",
+      "range": "2016-09-30 至 2026-09-30",
+      "purpose": "收益、波动、回撤与相关性"
+    },
+    {
+      "id": "regime",
+      "label": "环境层",
+      "range": "2025-09-30 至 2026-09-30",
+      "purpose": "最近一年环境，不决定战略比例"
+    },
+    {
+      "id": "trend",
+      "label": "趋势层",
+      "range": "2026-03-30 至 2026-09-30",
+      "purpose": "六个月趋势，只作观察"
+    },
+    {
+      "id": "news",
+      "label": "消息层",
+      "range": "2026-09-27 至 2026-09-30",
+      "purpose": "72 小时事件解释"
+    }
+  ],
+  "assets": [
+    {
+      "id": "a-share",
+      "symbol": "510300",
+      "name": "A 股宽基代表",
+      "instrument": "沪深300ETF 510300",
+      "bucket": "中国权益",
+      "color": "#176a8d",
+      "metrics": {
+        "startDate": "2016-09-30",
+        "endDate": "2026-09-30",
+        "years": 10.0,
+        "annualizedReturn": 4.3,
+        "annualizedVolatility": 15.5,
+        "maxDrawdown": -38.7,
+        "maxDrawdownDate": "2024-02-02",
+        "oneYearReturn": -3.4,
+        "sixMonthReturn": -0.5,
+        "positiveMonthRatio": 57.5
+      },
+      "basis": "境内 ETF 累计净值"
+    },
+    {
+      "id": "hong-kong",
+      "symbol": "159920",
+      "name": "港股宽基代表",
+      "instrument": "恒生ETF 159920",
+      "bucket": "中国权益",
+      "color": "#4d8f88",
+      "metrics": {
+        "startDate": "2016-09-30",
+        "endDate": "2026-09-30",
+        "years": 10.0,
+        "annualizedReturn": 2.1,
+        "annualizedVolatility": 18.3,
+        "maxDrawdown": -45.6,
+        "maxDrawdownDate": "2022-10-31",
+        "oneYearReturn": -11.8,
+        "sixMonthReturn": -2.0,
+        "positiveMonthRatio": 53.3
+      },
+      "basis": "境内 ETF 累计净值"
+    },
+    {
+      "id": "rmb-bond",
+      "symbol": "511010",
+      "name": "人民币国债代表",
+      "instrument": "国债ETF 511010",
+      "bucket": "人民币债券",
+      "color": "#75879b",
+      "metrics": {
+        "startDate": "2016-09-30",
+        "endDate": "2026-09-30",
+        "years": 10.0,
+        "annualizedReturn": 2.5,
+        "annualizedVolatility": 1.9,
+        "maxDrawdown": -4.4,
+        "maxDrawdownDate": "2020-09-04",
+        "oneYearReturn": 2.4,
+        "sixMonthReturn": 1.2,
+        "positiveMonthRatio": 69.2
+      },
+      "basis": "境内 ETF 累计净值"
+    },
+    {
+      "id": "global-equity",
+      "symbol": "513500",
+      "name": "海外权益代表",
+      "instrument": "标普500ETF 513500",
+      "bucket": "全球权益",
+      "color": "#6c5c9a",
+      "metrics": {
+        "startDate": "2016-09-30",
+        "endDate": "2026-09-29",
+        "years": 10.0,
+        "annualizedReturn": 13.9,
+        "annualizedVolatility": 14.7,
+        "maxDrawdown": -32.9,
+        "maxDrawdownDate": "2020-03-23",
+        "oneYearReturn": 9.3,
+        "sixMonthReturn": 17.9,
+        "positiveMonthRatio": 68.3
+      },
+      "basis": "境内 ETF 累计净值"
+    },
+    {
+      "id": "gold",
+      "symbol": "518880",
+      "name": "黄金代表",
+      "instrument": "黄金ETF 518880",
+      "bucket": "黄金 / 商品",
+      "color": "#a96f52",
+      "metrics": {
+        "startDate": "2016-09-30",
+        "endDate": "2026-09-30",
+        "years": 10.0,
+        "annualizedReturn": 11.7,
+        "annualizedVolatility": 14.2,
+        "maxDrawdown": -30.3,
+        "maxDrawdownDate": "2026-07-01",
+        "oneYearReturn": 3.4,
+        "sixMonthReturn": -11.2,
+        "positiveMonthRatio": 56.7
+      },
+      "basis": "境内 ETF 累计净值"
+    },
+    {
+      "id": "reits",
+      "symbol": "160140",
+      "name": "海外 REITs 代表",
+      "instrument": "美国REIT 160140",
+      "bucket": "REITs",
+      "color": "#c49946",
+      "metrics": {
+        "startDate": "2017-10-26",
+        "endDate": "2026-09-29",
+        "years": 8.9,
+        "annualizedReturn": 3.7,
+        "annualizedVolatility": 16.8,
+        "maxDrawdown": -41.1,
+        "maxDrawdownDate": "2020-03-23",
+        "oneYearReturn": 4.3,
+        "sixMonthReturn": 4.7,
+        "positiveMonthRatio": 57.0
+      },
+      "basis": "QDII 基金累计净值"
+    }
+  ],
+  "assetTimeline": [
+    {
+      "date": "2017-10-31",
+      "a-share": 100.0,
+      "hong-kong": 100.0,
+      "rmb-bond": 100.0,
+      "global-equity": 100.0,
+      "gold": 100.0,
+      "reits": 100.0
+    },
+    {
+      "date": "2017-11-30",
+      "a-share": 99.97,
+      "hong-kong": 102.72,
+      "rmb-bond": 100.27,
+      "global-equity": 102.39,
+      "gold": 100.14,
+      "reits": 100.28
+    },
+    {
+      "date": "2017-12-31",
+      "a-share": 100.23,
+      "hong-kong": 103.94,
+      "rmb-bond": 100.45,
+      "global-equity": 102.31,
+      "gold": 99.61,
+      "reits": 99.57
+    },
+    {
+      "date": "2018-01-31",
+      "a-share": 106.0,
+      "hong-kong": 110.67,
+      "rmb-bond": 100.72,
+      "global-equity": 104.8,
+      "gold": 99.97,
+      "reits": 92.93
+    },
+    {
+      "date": "2018-02-28",
+      "a-share": 100.11,
+      "hong-kong": 103.68,
+      "rmb-bond": 101.36,
+      "global-equity": 100.69,
+      "gold": 98.57,
+      "reits": 86.51
+    },
+    {
+      "date": "2018-03-31",
+      "a-share": 97.14,
+      "hong-kong": 100.32,
+      "rmb-bond": 101.63,
+      "global-equity": 97.61,
+      "gold": 98.63,
+      "reits": 88.77
+    },
+    {
+      "date": "2018-04-30",
+      "a-share": 93.82,
+      "hong-kong": 101.75,
+      "rmb-bond": 102.8,
+      "global-equity": 99.22,
+      "gold": 98.49,
+      "reits": 90.8
+    },
+    {
+      "date": "2018-05-31",
+      "a-share": 95.02,
+      "hong-kong": 104.05,
+      "rmb-bond": 102.8,
+      "global-equity": 101.8,
+      "gold": 98.15,
+      "reits": 95.04
+    },
+    {
+      "date": "2018-06-30",
+      "a-share": 88.79,
+      "hong-kong": 101.85,
+      "rmb-bond": 103.16,
+      "global-equity": 105.41,
+      "gold": 97.31,
+      "reits": 101.54
+    },
+    {
+      "date": "2018-07-31",
+      "a-share": 89.64,
+      "hong-kong": 103.79,
+      "rmb-bond": 103.97,
+      "global-equity": 112.41,
+      "gold": 97.72,
+      "reits": 104.32
+    },
+    {
+      "date": "2018-08-31",
+      "a-share": 85.47,
+      "hong-kong": 101.68,
+      "rmb-bond": 103.7,
+      "global-equity": 116.02,
+      "gold": 96.86,
+      "reits": 106.87
+    },
+    {
+      "date": "2018-09-30",
+      "a-share": 88.0,
+      "hong-kong": 102.62,
+      "rmb-bond": 103.79,
+      "global-equity": 117.48,
+      "gold": 95.94,
+      "reits": 104.72
+    },
+    {
+      "date": "2018-10-31",
+      "a-share": 81.18,
+      "hong-kong": 93.45,
+      "rmb-bond": 104.43,
+      "global-equity": 110.7,
+      "gold": 99.43,
+      "reits": 103.38
+    },
+    {
+      "date": "2018-11-30",
+      "a-share": 81.63,
+      "hong-kong": 98.79,
+      "rmb-bond": 105.42,
+      "global-equity": 112.35,
+      "gold": 99.68,
+      "reits": 107.44
+    },
+    {
+      "date": "2018-12-31",
+      "a-share": 77.81,
+      "hong-kong": 95.37,
+      "rmb-bond": 106.23,
+      "global-equity": 101.1,
+      "gold": 103.23,
+      "reits": 98.07
+    },
+    {
+      "date": "2019-01-31",
+      "a-share": 82.26,
+      "hong-kong": 100.35,
+      "rmb-bond": 106.68,
+      "global-equity": 106.68,
+      "gold": 103.94,
+      "reits": 105.68
+    },
+    {
+      "date": "2019-02-28",
+      "a-share": 93.11,
+      "hong-kong": 102.49,
+      "rmb-bond": 106.32,
+      "global-equity": 109.76,
+      "gold": 103.66,
+      "reits": 106.28
+    },
+    {
+      "date": "2019-03-31",
+      "a-share": 97.73,
+      "hong-kong": 104.54,
+      "rmb-bond": 106.78,
+      "global-equity": 112.48,
+      "gold": 101.8,
+      "reits": 109.65
+    },
+    {
+      "date": "2019-04-30",
+      "a-share": 98.66,
+      "hong-kong": 106.7,
+      "rmb-bond": 105.96,
+      "global-equity": 116.83,
+      "gold": 101.71,
+      "reits": 109.27
+    },
+    {
+      "date": "2019-05-31",
+      "a-share": 92.36,
+      "hong-kong": 100.07,
+      "rmb-bond": 106.78,
+      "global-equity": 111.98,
+      "gold": 105.26,
+      "reits": 111.39
+    },
+    {
+      "date": "2019-06-30",
+      "a-share": 97.47,
+      "hong-kong": 106.36,
+      "rmb-bond": 107.05,
+      "global-equity": 119.29,
+      "gold": 113.77,
+      "reits": 112.28
+    },
+    {
+      "date": "2019-07-31",
+      "a-share": 98.38,
+      "hong-kong": 103.86,
+      "rmb-bond": 107.5,
+      "global-equity": 121.06,
+      "gold": 115.72,
+      "reits": 114.01
+    },
+    {
+      "date": "2019-08-31",
+      "a-share": 97.7,
+      "hong-kong": 98.88,
+      "rmb-bond": 107.95,
+      "global-equity": 122.32,
+      "gold": 128.02,
+      "reits": 119.7
+    },
+    {
+      "date": "2019-09-30",
+      "a-share": 98.06,
+      "hong-kong": 100.19,
+      "rmb-bond": 108.13,
+      "global-equity": 124.19,
+      "gold": 124.46,
+      "reits": 122.2
+    },
+    {
+      "date": "2019-10-31",
+      "a-share": 99.73,
+      "hong-kong": 102.94,
+      "rmb-bond": 107.95,
+      "global-equity": 126.4,
+      "gold": 122.91,
+      "reits": 122.73
+    },
+    {
+      "date": "2019-11-30",
+      "a-share": 98.32,
+      "hong-kong": 100.63,
+      "rmb-bond": 108.58,
+      "global-equity": 130.41,
+      "gold": 119.72,
+      "reits": 120.71
+    },
+    {
+      "date": "2019-12-31",
+      "a-share": 104.49,
+      "hong-kong": 107.01,
+      "rmb-bond": 109.3,
+      "global-equity": 133.1,
+      "gold": 123.0,
+      "reits": 118.63
+    },
+    {
+      "date": "2020-01-31",
+      "a-share": 102.27,
+      "hong-kong": 104.84,
+      "rmb-bond": 109.94,
+      "global-equity": 135.31,
+      "gold": 125.47,
+      "reits": 120.24
+    },
+    {
+      "date": "2020-02-29",
+      "a-share": 100.71,
+      "hong-kong": 100.02,
+      "rmb-bond": 111.11,
+      "global-equity": 122.41,
+      "gold": 131.7,
+      "reits": 110.23
+    },
+    {
+      "date": "2020-03-31",
+      "a-share": 94.78,
+      "hong-kong": 92.02,
+      "rmb-bond": 112.38,
+      "global-equity": 108.43,
+      "gold": 131.25,
+      "reits": 88.31
+    },
+    {
+      "date": "2020-04-30",
+      "a-share": 100.02,
+      "hong-kong": 95.3,
+      "rmb-bond": 115.0,
+      "global-equity": 121.72,
+      "gold": 137.19,
+      "reits": 94.26
+    },
+    {
+      "date": "2020-05-31",
+      "a-share": 99.2,
+      "hong-kong": 90.21,
+      "rmb-bond": 113.1,
+      "global-equity": 128.74,
+      "gold": 141.08,
+      "reits": 94.54
+    },
+    {
+      "date": "2020-06-30",
+      "a-share": 106.67,
+      "hong-kong": 95.61,
+      "rmb-bond": 111.83,
+      "global-equity": 130.19,
+      "gold": 143.11,
+      "reits": 95.63
+    },
+    {
+      "date": "2020-07-31",
+      "a-share": 119.88,
+      "hong-kong": 95.51,
+      "rmb-bond": 111.2,
+      "global-equity": 135.53,
+      "gold": 154.25,
+      "reits": 97.3
+    },
+    {
+      "date": "2020-08-31",
+      "a-share": 122.87,
+      "hong-kong": 96.21,
+      "rmb-bond": 110.39,
+      "global-equity": 142.5,
+      "gold": 150.62,
+      "reits": 95.93
+    },
+    {
+      "date": "2020-09-30",
+      "a-share": 117.5,
+      "hong-kong": 89.48,
+      "rmb-bond": 110.39,
+      "global-equity": 135.89,
+      "gold": 144.82,
+      "reits": 92.47
+    },
+    {
+      "date": "2020-10-31",
+      "a-share": 120.05,
+      "hong-kong": 90.76,
+      "rmb-bond": 110.66,
+      "global-equity": 130.5,
+      "gold": 142.63,
+      "reits": 89.05
+    },
+    {
+      "date": "2020-11-30",
+      "a-share": 126.34,
+      "hong-kong": 96.76,
+      "rmb-bond": 110.39,
+      "global-equity": 141.59,
+      "gold": 132.97,
+      "reits": 96.4
+    },
+    {
+      "date": "2020-12-31",
+      "a-share": 132.25,
+      "hong-kong": 98.94,
+      "rmb-bond": 111.2,
+      "global-equity": 145.78,
+      "gold": 139.99,
+      "reits": 98.32
+    },
+    {
+      "date": "2021-01-31",
+      "a-share": 135.52,
+      "hong-kong": 101.64,
+      "rmb-bond": 111.11,
+      "global-equity": 143.01,
+      "gold": 137.88,
+      "reits": 97.17
+    },
+    {
+      "date": "2021-02-28",
+      "a-share": 135.19,
+      "hong-kong": 103.96,
+      "rmb-bond": 111.11,
+      "global-equity": 146.86,
+      "gold": 132.0,
+      "reits": 101.73
+    },
+    {
+      "date": "2021-03-31",
+      "a-share": 128.44,
+      "hong-kong": 103.19,
+      "rmb-bond": 111.56,
+      "global-equity": 155.46,
+      "gold": 127.84,
+      "reits": 107.59
+    },
+    {
+      "date": "2021-04-30",
+      "a-share": 130.34,
+      "hong-kong": 103.06,
+      "rmb-bond": 112.01,
+      "global-equity": 161.03,
+      "gold": 132.84,
+      "reits": 113.92
+    },
+    {
+      "date": "2021-05-31",
+      "a-share": 135.27,
+      "hong-kong": 103.46,
+      "rmb-bond": 112.47,
+      "global-equity": 160.0,
+      "gold": 139.97,
+      "reits": 113.13
+    },
+    {
+      "date": "2021-06-30",
+      "a-share": 133.47,
+      "hong-kong": 103.88,
+      "rmb-bond": 112.65,
+      "global-equity": 165.43,
+      "gold": 130.86,
+      "reits": 117.03
+    },
+    {
+      "date": "2021-07-31",
+      "a-share": 124.45,
+      "hong-kong": 94.24,
+      "rmb-bond": 114.0,
+      "global-equity": 169.19,
+      "gold": 136.19,
+      "reits": 122.74
+    },
+    {
+      "date": "2021-08-31",
+      "a-share": 124.52,
+      "hong-kong": 94.02,
+      "rmb-bond": 114.18,
+      "global-equity": 174.35,
+      "gold": 134.94,
+      "reits": 124.73
+    },
+    {
+      "date": "2021-09-30",
+      "a-share": 125.97,
+      "hong-kong": 89.92,
+      "rmb-bond": 114.27,
+      "global-equity": 166.51,
+      "gold": 129.38,
+      "reits": 118.5
+    },
+    {
+      "date": "2021-10-31",
+      "a-share": 127.01,
+      "hong-kong": 91.52,
+      "rmb-bond": 113.91,
+      "global-equity": 175.47,
+      "gold": 132.21,
+      "reits": 125.41
+    },
+    {
+      "date": "2021-11-30",
+      "a-share": 125.21,
+      "hong-kong": 84.69,
+      "rmb-bond": 114.81,
+      "global-equity": 173.81,
+      "gold": 131.56,
+      "reits": 124.19
+    },
+    {
+      "date": "2021-12-31",
+      "a-share": 127.68,
+      "hong-kong": 84.33,
+      "rmb-bond": 115.45,
+      "global-equity": 181.23,
+      "gold": 133.4,
+      "reits": 134.38
+    },
+    {
+      "date": "2022-01-31",
+      "a-share": 118.87,
+      "hong-kong": 84.8,
+      "rmb-bond": 116.44,
+      "global-equity": 168.52,
+      "gold": 131.64,
+      "reits": 125.01
+    },
+    {
+      "date": "2022-02-28",
+      "a-share": 119.23,
+      "hong-kong": 81.14,
+      "rmb-bond": 116.08,
+      "global-equity": 165.03,
+      "gold": 137.86,
+      "reits": 121.09
+    },
+    {
+      "date": "2022-03-31",
+      "a-share": 110.86,
+      "hong-kong": 78.88,
+      "rmb-bond": 116.08,
+      "global-equity": 171.55,
+      "gold": 140.43,
+      "reits": 128.99
+    },
+    {
+      "date": "2022-04-30",
+      "a-share": 106.09,
+      "hong-kong": 78.52,
+      "rmb-bond": 116.17,
+      "global-equity": 163.08,
+      "gold": 144.3,
+      "reits": 128.3
+    },
+    {
+      "date": "2022-05-31",
+      "a-share": 107.97,
+      "hong-kong": 80.42,
+      "rmb-bond": 116.71,
+      "global-equity": 164.23,
+      "gold": 141.82,
+      "reits": 120.53
+    },
+    {
+      "date": "2022-06-30",
+      "a-share": 117.77,
+      "hong-kong": 83.05,
+      "rmb-bond": 116.53,
+      "global-equity": 151.62,
+      "gold": 139.39,
+      "reits": 112.48
+    },
+    {
+      "date": "2022-07-31",
+      "a-share": 111.05,
+      "hong-kong": 77.53,
+      "rmb-bond": 117.34,
+      "global-equity": 166.18,
+      "gold": 136.58,
+      "reits": 122.15
+    },
+    {
+      "date": "2022-08-31",
+      "a-share": 109.09,
+      "hong-kong": 78.39,
+      "rmb-bond": 118.07,
+      "global-equity": 162.71,
+      "gold": 137.55,
+      "reits": 117.4
+    },
+    {
+      "date": "2022-09-30",
+      "a-share": 102.66,
+      "hong-kong": 70.25,
+      "rmb-bond": 117.52,
+      "global-equity": 151.57,
+      "gold": 138.61,
+      "reits": 106.86
+    },
+    {
+      "date": "2022-10-31",
+      "a-share": 95.73,
+      "hong-kong": 60.94,
+      "rmb-bond": 118.34,
+      "global-equity": 165.55,
+      "gold": 139.19,
+      "reits": 112.33
+    },
+    {
+      "date": "2022-11-30",
+      "a-share": 103.75,
+      "hong-kong": 76.21,
+      "rmb-bond": 117.25,
+      "global-equity": 174.58,
+      "gold": 144.1,
+      "reits": 118.16
+    },
+    {
+      "date": "2022-12-31",
+      "a-share": 104.24,
+      "hong-kong": 78.62,
+      "rmb-bond": 117.8,
+      "global-equity": 159.59,
+      "gold": 145.73,
+      "reits": 109.1
+    },
+    {
+      "date": "2023-01-31",
+      "a-share": 110.91,
+      "hong-kong": 83.47,
+      "rmb-bond": 117.71,
+      "global-equity": 163.62,
+      "gold": 148.47,
+      "reits": 116.66
+    },
+    {
+      "date": "2023-02-28",
+      "a-share": 108.8,
+      "hong-kong": 77.88,
+      "rmb-bond": 117.8,
+      "global-equity": 164.0,
+      "gold": 146.44,
+      "reits": 114.27
+    },
+    {
+      "date": "2023-03-31",
+      "a-share": 108.35,
+      "hong-kong": 79.45,
+      "rmb-bond": 118.25,
+      "global-equity": 167.87,
+      "gold": 156.31,
+      "reits": 109.98
+    },
+    {
+      "date": "2023-04-30",
+      "a-share": 107.83,
+      "hong-kong": 78.11,
+      "rmb-bond": 118.79,
+      "global-equity": 171.64,
+      "gold": 157.21,
+      "reits": 111.44
+    },
+    {
+      "date": "2023-05-31",
+      "a-share": 102.6,
+      "hong-kong": 73.82,
+      "rmb-bond": 119.78,
+      "global-equity": 176.09,
+      "gold": 159.38,
+      "reits": 110.83
+    },
+    {
+      "date": "2023-06-30",
+      "a-share": 104.44,
+      "hong-kong": 78.14,
+      "rmb-bond": 120.23,
+      "global-equity": 191.2,
+      "gold": 158.94,
+      "reits": 118.04
+    },
+    {
+      "date": "2023-07-31",
+      "a-share": 109.21,
+      "hong-kong": 82.56,
+      "rmb-bond": 120.23,
+      "global-equity": 194.57,
+      "gold": 161.3,
+      "reits": 119.46
+    },
+    {
+      "date": "2023-08-31",
+      "a-share": 103.44,
+      "hong-kong": 76.13,
+      "rmb-bond": 120.78,
+      "global-equity": 192.6,
+      "gold": 164.34,
+      "reits": 116.73
+    },
+    {
+      "date": "2023-09-30",
+      "a-share": 101.67,
+      "hong-kong": 72.62,
+      "rmb-bond": 120.33,
+      "global-equity": 183.74,
+      "gold": 158.26,
+      "reits": 108.67
+    },
+    {
+      "date": "2023-10-31",
+      "a-share": 98.9,
+      "hong-kong": 71.57,
+      "rmb-bond": 120.51,
+      "global-equity": 179.07,
+      "gold": 168.68,
+      "reits": 104.08
+    },
+    {
+      "date": "2023-11-30",
+      "a-share": 97.06,
+      "hong-kong": 70.79,
+      "rmb-bond": 120.6,
+      "global-equity": 193.16,
+      "gold": 167.62,
+      "reits": 113.18
+    },
+    {
+      "date": "2023-12-31",
+      "a-share": 95.59,
+      "hong-kong": 70.6,
+      "rmb-bond": 121.59,
+      "global-equity": 201.24,
+      "gold": 169.53,
+      "reits": 123.23
+    },
+    {
+      "date": "2024-01-31",
+      "a-share": 90.47,
+      "hong-kong": 64.68,
+      "rmb-bond": 122.31,
+      "global-equity": 205.0,
+      "gold": 169.63,
+      "reits": 118.9
+    },
+    {
+      "date": "2024-02-29",
+      "a-share": 97.4,
+      "hong-kong": 68.5,
+      "rmb-bond": 122.76,
+      "global-equity": 215.8,
+      "gold": 169.91,
+      "reits": 120.77
+    },
+    {
+      "date": "2024-03-31",
+      "a-share": 97.86,
+      "hong-kong": 68.73,
+      "rmb-bond": 123.13,
+      "global-equity": 222.2,
+      "gold": 186.3,
+      "reits": 122.51
+    },
+    {
+      "date": "2024-04-30",
+      "a-share": 99.47,
+      "hong-kong": 73.54,
+      "rmb-bond": 123.58,
+      "global-equity": 213.2,
+      "gold": 192.64,
+      "reits": 114.2
+    },
+    {
+      "date": "2024-05-31",
+      "a-share": 99.03,
+      "hong-kong": 75.18,
+      "rmb-bond": 124.03,
+      "global-equity": 223.57,
+      "gold": 195.29,
+      "reits": 119.22
+    },
+    {
+      "date": "2024-06-30",
+      "a-share": 96.89,
+      "hong-kong": 74.52,
+      "rmb-bond": 124.84,
+      "global-equity": 232.02,
+      "gold": 193.88,
+      "reits": 122.31
+    },
+    {
+      "date": "2024-07-31",
+      "a-share": 97.31,
+      "hong-kong": 73.65,
+      "rmb-bond": 125.65,
+      "global-equity": 234.68,
+      "gold": 198.51,
+      "reits": 127.65
+    },
+    {
+      "date": "2024-08-31",
+      "a-share": 94.64,
+      "hong-kong": 76.16,
+      "rmb-bond": 125.75,
+      "global-equity": 239.36,
+      "gold": 201.99,
+      "reits": 134.61
+    },
+    {
+      "date": "2024-09-30",
+      "a-share": 111.21,
+      "hong-kong": 88.06,
+      "rmb-bond": 126.02,
+      "global-equity": 240.65,
+      "gold": 209.56,
+      "reits": 135.66
+    },
+    {
+      "date": "2024-10-31",
+      "a-share": 108.24,
+      "hong-kong": 86.06,
+      "rmb-bond": 126.29,
+      "global-equity": 242.24,
+      "gold": 223.08,
+      "reits": 133.54
+    },
+    {
+      "date": "2024-11-30",
+      "a-share": 108.88,
+      "hong-kong": 83.11,
+      "rmb-bond": 127.28,
+      "global-equity": 258.53,
+      "gold": 216.23,
+      "reits": 140.17
+    },
+    {
+      "date": "2024-12-31",
+      "a-share": 109.38,
+      "hong-kong": 85.82,
+      "rmb-bond": 128.82,
+      "global-equity": 252.15,
+      "gold": 216.07,
+      "reits": 130.38
+    },
+    {
+      "date": "2025-01-31",
+      "a-share": 106.75,
+      "hong-kong": 86.08,
+      "rmb-bond": 128.91,
+      "global-equity": 256.97,
+      "gold": 225.91,
+      "reits": 132.87
+    },
+    {
+      "date": "2025-02-28",
+      "a-share": 108.48,
+      "hong-kong": 97.26,
+      "rmb-bond": 127.91,
+      "global-equity": 254.68,
+      "gold": 235.49,
+      "reits": 136.15
+    },
+    {
+      "date": "2025-03-31",
+      "a-share": 108.42,
+      "hong-kong": 98.14,
+      "rmb-bond": 127.82,
+      "global-equity": 240.14,
+      "gold": 256.36,
+      "reits": 131.45
+    },
+    {
+      "date": "2025-04-30",
+      "a-share": 105.75,
+      "hong-kong": 94.82,
+      "rmb-bond": 128.82,
+      "global-equity": 239.03,
+      "gold": 273.59,
+      "reits": 128.52
+    },
+    {
+      "date": "2025-05-31",
+      "a-share": 107.55,
+      "hong-kong": 98.79,
+      "rmb-bond": 128.64,
+      "global-equity": 253.29,
+      "gold": 269.44,
+      "reits": 130.62
+    },
+    {
+      "date": "2025-06-30",
+      "a-share": 110.53,
+      "hong-kong": 101.94,
+      "rmb-bond": 129.09,
+      "global-equity": 265.0,
+      "gold": 267.77,
+      "reits": 128.82
+    },
+    {
+      "date": "2025-07-31",
+      "a-share": 114.48,
+      "hong-kong": 104.68,
+      "rmb-bond": 128.82,
+      "global-equity": 270.34,
+      "gold": 268.67,
+      "reits": 127.61
+    },
+    {
+      "date": "2025-08-31",
+      "a-share": 124.68,
+      "hong-kong": 106.04,
+      "rmb-bond": 128.73,
+      "global-equity": 273.78,
+      "gold": 273.56,
+      "reits": 132.28
+    },
+    {
+      "date": "2025-09-30",
+      "a-share": 128.22,
+      "hong-kong": 113.72,
+      "rmb-bond": 128.91,
+      "global-equity": 283.55,
+      "gold": 304.93,
+      "reits": 133.49
+    },
+    {
+      "date": "2025-10-31",
+      "a-share": 128.42,
+      "hong-kong": 109.78,
+      "rmb-bond": 129.54,
+      "global-equity": 289.23,
+      "gold": 322.12,
+      "reits": 131.44
+    },
+    {
+      "date": "2025-11-30",
+      "a-share": 125.77,
+      "hong-kong": 109.36,
+      "rmb-bond": 129.36,
+      "global-equity": 289.41,
+      "gold": 331.27,
+      "reits": 134.88
+    },
+    {
+      "date": "2025-12-31",
+      "a-share": 128.46,
+      "hong-kong": 107.85,
+      "rmb-bond": 129.54,
+      "global-equity": 287.17,
+      "gold": 340.42,
+      "reits": 130.71
+    },
+    {
+      "date": "2026-01-31",
+      "a-share": 130.4,
+      "hong-kong": 113.63,
+      "rmb-bond": 129.9,
+      "global-equity": 288.26,
+      "gold": 406.25,
+      "reits": 133.09
+    },
+    {
+      "date": "2026-02-28",
+      "a-share": 130.57,
+      "hong-kong": 109.64,
+      "rmb-bond": 130.17,
+      "global-equity": 283.91,
+      "gold": 398.68,
+      "reits": 141.6
+    },
+    {
+      "date": "2026-03-31",
+      "a-share": 124.47,
+      "hong-kong": 102.35,
+      "rmb-bond": 130.44,
+      "global-equity": 269.44,
+      "gold": 355.21,
+      "reits": 133.83
+    },
+    {
+      "date": "2026-04-30",
+      "a-share": 132.95,
+      "hong-kong": 105.43,
+      "rmb-bond": 130.8,
+      "global-equity": 295.34,
+      "gold": 353.17,
+      "reits": 143.3
+    },
+    {
+      "date": "2026-05-31",
+      "a-share": 135.08,
+      "hong-kong": 102.89,
+      "rmb-bond": 131.35,
+      "global-equity": 308.66,
+      "gold": 343.03,
+      "reits": 142.03
+    },
+    {
+      "date": "2026-06-30",
+      "a-share": 137.43,
+      "hong-kong": 94.18,
+      "rmb-bond": 131.44,
+      "global-equity": 305.02,
+      "gold": 305.96,
+      "reits": 146.59
+    },
+    {
+      "date": "2026-07-31",
+      "a-share": 128.84,
+      "hong-kong": 105.75,
+      "rmb-bond": 131.71,
+      "global-equity": 303.38,
+      "gold": 307.86,
+      "reits": 149.48
+    },
+    {
+      "date": "2026-08-31",
+      "a-share": 129.88,
+      "hong-kong": 104.52,
+      "rmb-bond": 131.8,
+      "global-equity": 311.18,
+      "gold": 334.49,
+      "reits": 145.26
+    },
+    {
+      "date": "2026-09-30",
+      "a-share": 123.81,
+      "hong-kong": 100.33,
+      "rmb-bond": 131.98,
+      "global-equity": 308.87,
+      "gold": 315.3,
+      "reits": 138.39
+    }
+  ],
+  "correlation": {
+    "ids": [
+      "bonds",
+      "china",
+      "global",
+      "reits",
+      "gold"
+    ],
+    "rows": [
+      {
+        "id": "bonds",
+        "values": [
+          1.0,
+          -0.29,
+          -0.04,
+          -0.05,
+          0.06
+        ]
+      },
+      {
+        "id": "china",
+        "values": [
+          -0.29,
+          1.0,
+          0.29,
+          0.2,
+          0.15
+        ]
+      },
+      {
+        "id": "global",
+        "values": [
+          -0.04,
+          0.29,
+          1.0,
+          0.76,
+          -0.01
+        ]
+      },
+      {
+        "id": "reits",
+        "values": [
+          -0.05,
+          0.2,
+          0.76,
+          1.0,
+          0.01
+        ]
+      },
+      {
+        "id": "gold",
+        "values": [
+          0.06,
+          0.15,
+          -0.01,
+          0.01,
+          1.0
+        ]
+      }
+    ]
+  },
+  "profileBacktests": [
+    {
+      "id": "conservative",
+      "name": "保守型",
+      "weights": {
+        "cash": 30,
+        "bonds": 40,
+        "china": 10,
+        "global": 5,
+        "reits": 5,
+        "gold": 10
+      },
+      "metrics": {
+        "annualizedReturn": 3.9,
+        "annualizedVolatility": 2.9,
+        "maxDrawdown": -2.7,
+        "maxDrawdownDate": "2022-09-30",
+        "bestYear": {
+          "year": 2024,
+          "return": 8.3
+        },
+        "worstYear": {
+          "year": 2022,
+          "return": -1.1
+        },
+        "endingValue": 141.1
+      }
+    },
+    {
+      "id": "steady",
+      "name": "稳健型",
+      "weights": {
+        "cash": 20,
+        "bonds": 35,
+        "china": 17,
+        "global": 13,
+        "reits": 5,
+        "gold": 10
+      },
+      "metrics": {
+        "annualizedReturn": 5.1,
+        "annualizedVolatility": 4.6,
+        "maxDrawdown": -5.4,
+        "maxDrawdownDate": "2022-09-30",
+        "bestYear": {
+          "year": 2019,
+          "return": 12.4
+        },
+        "worstYear": {
+          "year": 2022,
+          "return": -3.0
+        },
+        "endingValue": 155.7
+      }
+    },
+    {
+      "id": "balanced",
+      "name": "平衡型",
+      "weights": {
+        "cash": 12,
+        "bonds": 28,
+        "china": 25,
+        "global": 20,
+        "reits": 7,
+        "gold": 8
+      },
+      "metrics": {
+        "annualizedReturn": 5.8,
+        "annualizedVolatility": 6.5,
+        "maxDrawdown": -8.6,
+        "maxDrawdownDate": "2022-09-30",
+        "bestYear": {
+          "year": 2019,
+          "return": 16.7
+        },
+        "worstYear": {
+          "year": 2022,
+          "return": -5.5
+        },
+        "endingValue": 166.0
+      }
+    },
+    {
+      "id": "growth",
+      "name": "成长型",
+      "weights": {
+        "cash": 8,
+        "bonds": 20,
+        "china": 30,
+        "global": 27,
+        "reits": 7,
+        "gold": 8
+      },
+      "metrics": {
+        "annualizedReturn": 6.6,
+        "annualizedVolatility": 8.0,
+        "maxDrawdown": -10.7,
+        "maxDrawdownDate": "2022-09-30",
+        "bestYear": {
+          "year": 2019,
+          "return": 20.2
+        },
+        "worstYear": {
+          "year": 2022,
+          "return": -7.1
+        },
+        "endingValue": 177.7
+      }
+    },
+    {
+      "id": "aggressive",
+      "name": "进取型",
+      "weights": {
+        "cash": 5,
+        "bonds": 12,
+        "china": 32,
+        "global": 36,
+        "reits": 7,
+        "gold": 8
+      },
+      "metrics": {
+        "annualizedReturn": 7.6,
+        "annualizedVolatility": 9.4,
+        "maxDrawdown": -12.5,
+        "maxDrawdownDate": "2022-09-30",
+        "bestYear": {
+          "year": 2019,
+          "return": 23.5
+        },
+        "worstYear": {
+          "year": 2022,
+          "return": -8.6
+        },
+        "endingValue": 193.2
+      }
+    }
+  ],
+  "profileTimeline": [
+    {
+      "date": "2017-11-30",
+      "conservative": 100.0,
+      "steady": 100.0,
+      "balanced": 100.0,
+      "growth": 100.0,
+      "aggressive": 100.0
+    },
+    {
+      "date": "2017-12-31",
+      "conservative": 100.03,
+      "steady": 100.06,
+      "balanced": 100.08,
+      "growth": 100.09,
+      "aggressive": 100.07
+    },
+    {
+      "date": "2018-01-31",
+      "conservative": 100.56,
+      "steady": 101.19,
+      "balanced": 101.7,
+      "growth": 102.15,
+      "aggressive": 102.46
+    },
+    {
+      "date": "2018-02-28",
+      "conservative": 99.55,
+      "steady": 99.41,
+      "balanced": 99.0,
+      "growth": 98.82,
+      "aggressive": 98.59
+    },
+    {
+      "date": "2018-03-31",
+      "conservative": 99.34,
+      "steady": 98.73,
+      "balanced": 97.9,
+      "growth": 97.34,
+      "aggressive": 96.75
+    },
+    {
+      "date": "2018-04-30",
+      "conservative": 99.78,
+      "steady": 99.1,
+      "balanced": 98.2,
+      "growth": 97.56,
+      "aggressive": 96.99
+    },
+    {
+      "date": "2018-05-31",
+      "conservative": 100.27,
+      "steady": 99.9,
+      "balanced": 99.4,
+      "growth": 99.0,
+      "aggressive": 98.68
+    },
+    {
+      "date": "2018-06-30",
+      "conservative": 100.32,
+      "steady": 99.85,
+      "balanced": 99.31,
+      "growth": 98.88,
+      "aggressive": 98.74
+    },
+    {
+      "date": "2018-07-31",
+      "conservative": 101.27,
+      "steady": 101.38,
+      "balanced": 101.38,
+      "growth": 101.39,
+      "aggressive": 101.81
+    },
+    {
+      "date": "2018-08-31",
+      "conservative": 100.97,
+      "steady": 101.08,
+      "balanced": 101.08,
+      "growth": 101.15,
+      "aggressive": 101.8
+    },
+    {
+      "date": "2018-09-30",
+      "conservative": 101.11,
+      "steady": 101.48,
+      "balanced": 101.73,
+      "growth": 102.0,
+      "aggressive": 102.81
+    },
+    {
+      "date": "2018-10-31",
+      "conservative": 100.55,
+      "steady": 99.84,
+      "balanced": 98.88,
+      "growth": 98.26,
+      "aggressive": 98.29
+    },
+    {
+      "date": "2018-11-30",
+      "conservative": 101.44,
+      "steady": 100.95,
+      "balanced": 100.24,
+      "growth": 99.75,
+      "aggressive": 99.88
+    },
+    {
+      "date": "2018-12-31",
+      "conservative": 100.73,
+      "steady": 99.09,
+      "balanced": 97.05,
+      "growth": 95.6,
+      "aggressive": 94.67
+    },
+    {
+      "date": "2019-01-31",
+      "conservative": 102.2,
+      "steady": 101.33,
+      "balanced": 100.16,
+      "growth": 99.27,
+      "aggressive": 98.85
+    },
+    {
+      "date": "2019-02-28",
+      "conservative": 103.22,
+      "steady": 103.3,
+      "balanced": 103.14,
+      "growth": 102.94,
+      "aggressive": 102.98
+    },
+    {
+      "date": "2019-03-31",
+      "conservative": 103.92,
+      "steady": 104.48,
+      "balanced": 104.9,
+      "growth": 105.05,
+      "aggressive": 105.38
+    },
+    {
+      "date": "2019-04-30",
+      "conservative": 103.91,
+      "steady": 104.92,
+      "balanced": 105.79,
+      "growth": 106.36,
+      "aggressive": 107.15
+    },
+    {
+      "date": "2019-05-31",
+      "conservative": 103.82,
+      "steady": 103.98,
+      "balanced": 103.91,
+      "growth": 103.75,
+      "aggressive": 103.92
+    },
+    {
+      "date": "2019-06-30",
+      "conservative": 105.74,
+      "steady": 106.85,
+      "balanced": 107.57,
+      "growth": 108.15,
+      "aggressive": 109.04
+    },
+    {
+      "date": "2019-07-31",
+      "conservative": 106.26,
+      "steady": 107.47,
+      "balanced": 108.26,
+      "growth": 108.93,
+      "aggressive": 109.92
+    },
+    {
+      "date": "2019-08-31",
+      "conservative": 107.68,
+      "steady": 108.84,
+      "balanced": 109.39,
+      "growth": 110.0,
+      "aggressive": 111.03
+    },
+    {
+      "date": "2019-09-30",
+      "conservative": 107.72,
+      "steady": 109.05,
+      "balanced": 109.87,
+      "growth": 110.63,
+      "aggressive": 111.82
+    },
+    {
+      "date": "2019-10-31",
+      "conservative": 107.85,
+      "steady": 109.5,
+      "balanced": 110.69,
+      "growth": 111.71,
+      "aggressive": 113.15
+    },
+    {
+      "date": "2019-11-30",
+      "conservative": 107.72,
+      "steady": 109.49,
+      "balanced": 110.76,
+      "growth": 111.88,
+      "aggressive": 113.56
+    },
+    {
+      "date": "2019-12-31",
+      "conservative": 109.0,
+      "steady": 111.42,
+      "balanced": 113.27,
+      "growth": 114.88,
+      "aggressive": 116.89
+    },
+    {
+      "date": "2020-01-31",
+      "conservative": 109.41,
+      "steady": 111.79,
+      "balanced": 113.53,
+      "growth": 115.1,
+      "aggressive": 117.19
+    },
+    {
+      "date": "2020-02-29",
+      "conservative": 109.18,
+      "steady": 110.44,
+      "balanced": 110.8,
+      "growth": 111.32,
+      "aggressive": 112.18
+    },
+    {
+      "date": "2020-03-31",
+      "conservative": 107.21,
+      "steady": 106.88,
+      "balanced": 105.24,
+      "growth": 104.38,
+      "aggressive": 103.79
+    },
+    {
+      "date": "2020-04-30",
+      "conservative": 110.25,
+      "steady": 111.2,
+      "balanced": 110.69,
+      "growth": 110.74,
+      "aggressive": 111.16
+    },
+    {
+      "date": "2020-05-31",
+      "conservative": 109.93,
+      "steady": 111.31,
+      "balanced": 111.12,
+      "growth": 111.65,
+      "aggressive": 112.75
+    },
+    {
+      "date": "2020-06-30",
+      "conservative": 110.5,
+      "steady": 112.6,
+      "balanced": 113.21,
+      "growth": 114.33,
+      "aggressive": 115.83
+    },
+    {
+      "date": "2020-07-31",
+      "conservative": 112.38,
+      "steady": 115.61,
+      "balanced": 117.24,
+      "growth": 119.28,
+      "aggressive": 121.52
+    },
+    {
+      "date": "2020-08-31",
+      "conservative": 112.22,
+      "steady": 116.12,
+      "balanced": 118.45,
+      "growth": 121.12,
+      "aggressive": 124.08
+    },
+    {
+      "date": "2020-09-30",
+      "conservative": 110.75,
+      "steady": 113.74,
+      "balanced": 115.16,
+      "growth": 117.05,
+      "aggressive": 119.27
+    },
+    {
+      "date": "2020-10-31",
+      "conservative": 110.48,
+      "steady": 113.25,
+      "balanced": 114.45,
+      "growth": 116.1,
+      "aggressive": 117.89
+    },
+    {
+      "date": "2020-11-30",
+      "conservative": 111.17,
+      "steady": 115.19,
+      "balanced": 117.97,
+      "growth": 120.71,
+      "aggressive": 123.64
+    },
+    {
+      "date": "2020-12-31",
+      "conservative": 112.8,
+      "steady": 117.43,
+      "balanced": 120.74,
+      "growth": 123.96,
+      "aggressive": 127.32
+    },
+    {
+      "date": "2021-01-31",
+      "conservative": 112.71,
+      "steady": 117.37,
+      "balanced": 120.78,
+      "growth": 124.01,
+      "aggressive": 127.22
+    },
+    {
+      "date": "2021-02-28",
+      "conservative": 112.7,
+      "steady": 117.65,
+      "balanced": 121.57,
+      "growth": 125.08,
+      "aggressive": 128.65
+    },
+    {
+      "date": "2021-03-31",
+      "conservative": 112.77,
+      "steady": 117.94,
+      "balanced": 122.19,
+      "growth": 125.96,
+      "aggressive": 130.08
+    },
+    {
+      "date": "2021-04-30",
+      "conservative": 114.04,
+      "steady": 119.67,
+      "balanced": 124.39,
+      "growth": 128.57,
+      "aggressive": 133.18
+    },
+    {
+      "date": "2021-05-31",
+      "conservative": 115.07,
+      "steady": 120.9,
+      "balanced": 125.71,
+      "growth": 130.0,
+      "aggressive": 134.62
+    },
+    {
+      "date": "2021-06-30",
+      "conservative": 114.7,
+      "steady": 120.75,
+      "balanced": 126.01,
+      "growth": 130.56,
+      "aggressive": 135.57
+    },
+    {
+      "date": "2021-07-31",
+      "conservative": 115.26,
+      "steady": 120.86,
+      "balanced": 125.48,
+      "growth": 129.6,
+      "aggressive": 134.52
+    },
+    {
+      "date": "2021-08-31",
+      "conservative": 115.5,
+      "steady": 121.39,
+      "balanced": 126.34,
+      "growth": 130.75,
+      "aggressive": 136.06
+    },
+    {
+      "date": "2021-09-30",
+      "conservative": 114.45,
+      "steady": 119.81,
+      "balanced": 124.22,
+      "growth": 128.1,
+      "aggressive": 132.74
+    },
+    {
+      "date": "2021-10-31",
+      "conservative": 115.33,
+      "steady": 121.35,
+      "balanced": 126.52,
+      "growth": 131.06,
+      "aggressive": 136.5
+    },
+    {
+      "date": "2021-11-30",
+      "conservative": 115.15,
+      "steady": 120.76,
+      "balanced": 125.4,
+      "growth": 129.52,
+      "aggressive": 134.61
+    },
+    {
+      "date": "2021-12-31",
+      "conservative": 116.43,
+      "steady": 122.58,
+      "balanced": 127.92,
+      "growth": 132.53,
+      "aggressive": 138.23
+    },
+    {
+      "date": "2022-01-31",
+      "conservative": 115.32,
+      "steady": 120.27,
+      "balanced": 124.18,
+      "growth": 127.61,
+      "aggressive": 132.0
+    },
+    {
+      "date": "2022-02-28",
+      "conservative": 115.3,
+      "steady": 119.97,
+      "balanced": 123.42,
+      "growth": 126.6,
+      "aggressive": 130.72
+    },
+    {
+      "date": "2022-03-31",
+      "conservative": 115.45,
+      "steady": 120.03,
+      "balanced": 123.37,
+      "growth": 126.53,
+      "aggressive": 130.96
+    },
+    {
+      "date": "2022-04-30",
+      "conservative": 115.13,
+      "steady": 118.95,
+      "balanced": 121.43,
+      "growth": 123.9,
+      "aggressive": 127.57
+    },
+    {
+      "date": "2022-05-31",
+      "conservative": 115.06,
+      "steady": 119.09,
+      "balanced": 121.68,
+      "growth": 124.29,
+      "aggressive": 128.05
+    },
+    {
+      "date": "2022-06-30",
+      "conservative": 114.81,
+      "steady": 118.72,
+      "balanced": 121.25,
+      "growth": 123.66,
+      "aggressive": 126.72
+    },
+    {
+      "date": "2022-07-31",
+      "conservative": 115.26,
+      "steady": 119.55,
+      "balanced": 122.54,
+      "growth": 125.36,
+      "aggressive": 129.34
+    },
+    {
+      "date": "2022-08-31",
+      "conservative": 115.18,
+      "steady": 119.15,
+      "balanced": 121.7,
+      "growth": 124.2,
+      "aggressive": 127.81
+    },
+    {
+      "date": "2022-09-30",
+      "conservative": 113.31,
+      "steady": 115.99,
+      "balanced": 116.98,
+      "growth": 118.39,
+      "aggressive": 120.9
+    },
+    {
+      "date": "2022-10-31",
+      "conservative": 113.5,
+      "steady": 116.29,
+      "balanced": 117.28,
+      "growth": 118.87,
+      "aggressive": 122.12
+    },
+    {
+      "date": "2022-11-30",
+      "conservative": 115.6,
+      "steady": 120.1,
+      "balanced": 122.94,
+      "growth": 125.95,
+      "aggressive": 130.41
+    },
+    {
+      "date": "2022-12-31",
+      "conservative": 115.16,
+      "steady": 118.89,
+      "balanced": 120.83,
+      "growth": 123.06,
+      "aggressive": 126.4
+    },
+    {
+      "date": "2023-01-31",
+      "conservative": 116.61,
+      "steady": 121.17,
+      "balanced": 124.09,
+      "growth": 127.0,
+      "aggressive": 130.9
+    },
+    {
+      "date": "2023-02-28",
+      "conservative": 115.99,
+      "steady": 120.26,
+      "balanced": 122.83,
+      "growth": 125.51,
+      "aggressive": 129.29
+    },
+    {
+      "date": "2023-03-31",
+      "conservative": 116.91,
+      "steady": 121.44,
+      "balanced": 123.98,
+      "growth": 126.87,
+      "aggressive": 130.94
+    },
+    {
+      "date": "2023-04-30",
+      "conservative": 117.3,
+      "steady": 121.96,
+      "balanced": 124.6,
+      "growth": 127.61,
+      "aggressive": 131.89
+    },
+    {
+      "date": "2023-05-31",
+      "conservative": 117.38,
+      "steady": 121.82,
+      "balanced": 124.06,
+      "growth": 126.88,
+      "aggressive": 131.23
+    },
+    {
+      "date": "2023-06-30",
+      "conservative": 118.77,
+      "steady": 124.33,
+      "balanced": 127.79,
+      "growth": 131.61,
+      "aggressive": 137.17
+    },
+    {
+      "date": "2023-07-31",
+      "conservative": 119.7,
+      "steady": 125.91,
+      "balanced": 130.07,
+      "growth": 134.44,
+      "aggressive": 140.47
+    },
+    {
+      "date": "2023-08-31",
+      "conservative": 119.22,
+      "steady": 124.74,
+      "balanced": 127.99,
+      "growth": 131.74,
+      "aggressive": 137.31
+    },
+    {
+      "date": "2023-09-30",
+      "conservative": 117.61,
+      "steady": 122.39,
+      "balanced": 124.86,
+      "growth": 127.96,
+      "aggressive": 132.77
+    },
+    {
+      "date": "2023-10-31",
+      "conservative": 117.78,
+      "steady": 122.11,
+      "balanced": 123.83,
+      "growth": 126.52,
+      "aggressive": 130.89
+    },
+    {
+      "date": "2023-11-30",
+      "conservative": 118.53,
+      "steady": 123.51,
+      "balanced": 126.0,
+      "growth": 129.32,
+      "aggressive": 134.66
+    },
+    {
+      "date": "2023-12-31",
+      "conservative": 119.69,
+      "steady": 124.99,
+      "balanced": 127.88,
+      "growth": 131.47,
+      "aggressive": 137.29
+    },
+    {
+      "date": "2024-01-31",
+      "conservative": 119.14,
+      "steady": 124.01,
+      "balanced": 126.26,
+      "growth": 129.5,
+      "aggressive": 135.23
+    },
+    {
+      "date": "2024-02-29",
+      "conservative": 120.59,
+      "steady": 126.64,
+      "balanced": 130.13,
+      "growth": 134.37,
+      "aggressive": 141.11
+    },
+    {
+      "date": "2024-03-31",
+      "conservative": 122.21,
+      "steady": 128.66,
+      "balanced": 132.28,
+      "growth": 136.87,
+      "aggressive": 144.09
+    },
+    {
+      "date": "2024-04-30",
+      "conservative": 122.54,
+      "steady": 128.87,
+      "balanced": 132.16,
+      "growth": 136.53,
+      "aggressive": 143.26
+    },
+    {
+      "date": "2024-05-31",
+      "conservative": 123.5,
+      "steady": 130.38,
+      "balanced": 134.25,
+      "growth": 139.15,
+      "aggressive": 146.59
+    },
+    {
+      "date": "2024-06-30",
+      "conservative": 123.91,
+      "steady": 131.01,
+      "balanced": 135.08,
+      "growth": 140.18,
+      "aggressive": 148.05
+    },
+    {
+      "date": "2024-07-31",
+      "conservative": 124.86,
+      "steady": 132.09,
+      "balanced": 136.29,
+      "growth": 141.47,
+      "aggressive": 149.49
+    },
+    {
+      "date": "2024-08-31",
+      "conservative": 125.47,
+      "steady": 132.85,
+      "balanced": 137.27,
+      "growth": 142.61,
+      "aggressive": 150.93
+    },
+    {
+      "date": "2024-09-30",
+      "conservative": 128.26,
+      "steady": 137.42,
+      "balanced": 143.8,
+      "growth": 150.63,
+      "aggressive": 159.98
+    },
+    {
+      "date": "2024-10-31",
+      "conservative": 128.81,
+      "steady": 137.83,
+      "balanced": 143.74,
+      "growth": 150.43,
+      "aggressive": 159.74
+    },
+    {
+      "date": "2024-11-30",
+      "conservative": 129.5,
+      "steady": 139.19,
+      "balanced": 145.92,
+      "growth": 153.27,
+      "aggressive": 163.61
+    },
+    {
+      "date": "2024-12-31",
+      "conservative": 129.67,
+      "steady": 139.14,
+      "balanced": 145.44,
+      "growth": 152.46,
+      "aggressive": 162.27
+    },
+    {
+      "date": "2025-01-31",
+      "conservative": 130.33,
+      "steady": 139.91,
+      "balanced": 146.17,
+      "growth": 153.3,
+      "aggressive": 163.38
+    },
+    {
+      "date": "2025-02-28",
+      "conservative": 131.24,
+      "steady": 141.33,
+      "balanced": 148.18,
+      "growth": 155.79,
+      "aggressive": 166.17
+    },
+    {
+      "date": "2025-03-31",
+      "conservative": 131.8,
+      "steady": 141.31,
+      "balanced": 147.24,
+      "growth": 154.21,
+      "aggressive": 163.64
+    },
+    {
+      "date": "2025-04-30",
+      "conservative": 132.56,
+      "steady": 141.75,
+      "balanced": 146.98,
+      "growth": 153.57,
+      "aggressive": 162.71
+    },
+    {
+      "date": "2025-05-31",
+      "conservative": 133.11,
+      "steady": 143.27,
+      "balanced": 149.56,
+      "growth": 157.12,
+      "aggressive": 167.44
+    },
+    {
+      "date": "2025-06-30",
+      "conservative": 133.82,
+      "steady": 144.82,
+      "balanced": 151.96,
+      "growth": 160.33,
+      "aggressive": 171.6
+    },
+    {
+      "date": "2025-07-31",
+      "conservative": 134.26,
+      "steady": 145.89,
+      "balanced": 153.68,
+      "growth": 162.66,
+      "aggressive": 174.56
+    },
+    {
+      "date": "2025-08-31",
+      "conservative": 135.69,
+      "steady": 148.27,
+      "balanced": 157.21,
+      "growth": 167.09,
+      "aggressive": 179.75
+    },
+    {
+      "date": "2025-09-30",
+      "conservative": 138.19,
+      "steady": 151.85,
+      "balanced": 161.57,
+      "growth": 172.47,
+      "aggressive": 186.24
+    },
+    {
+      "date": "2025-10-31",
+      "conservative": 139.15,
+      "steady": 153.0,
+      "balanced": 162.61,
+      "growth": 173.68,
+      "aggressive": 187.78
+    },
+    {
+      "date": "2025-11-30",
+      "conservative": 139.43,
+      "steady": 153.17,
+      "balanced": 162.6,
+      "growth": 173.56,
+      "aggressive": 187.62
+    },
+    {
+      "date": "2025-12-31",
+      "conservative": 139.78,
+      "steady": 153.56,
+      "balanced": 162.87,
+      "growth": 173.82,
+      "aggressive": 187.79
+    },
+    {
+      "date": "2026-01-31",
+      "conservative": 143.16,
+      "steady": 157.59,
+      "balanced": 166.93,
+      "growth": 178.4,
+      "aggressive": 192.86
+    },
+    {
+      "date": "2026-02-28",
+      "conservative": 143.23,
+      "steady": 157.35,
+      "balanced": 166.62,
+      "growth": 177.76,
+      "aggressive": 191.84
+    },
+    {
+      "date": "2026-03-31",
+      "conservative": 140.27,
+      "steady": 152.87,
+      "balanced": 160.73,
+      "growth": 170.35,
+      "aggressive": 182.72
+    },
+    {
+      "date": "2026-04-30",
+      "conservative": 142.31,
+      "steady": 156.85,
+      "balanced": 166.95,
+      "growth": 178.53,
+      "aggressive": 193.25
+    },
+    {
+      "date": "2026-05-31",
+      "conservative": 142.45,
+      "steady": 157.59,
+      "balanced": 168.32,
+      "growth": 180.54,
+      "aggressive": 196.16
+    },
+    {
+      "date": "2026-06-30",
+      "conservative": 140.91,
+      "steady": 155.58,
+      "balanced": 166.33,
+      "growth": 178.12,
+      "aggressive": 193.26
+    },
+    {
+      "date": "2026-07-31",
+      "conservative": 141.12,
+      "steady": 155.65,
+      "balanced": 166.27,
+      "growth": 177.9,
+      "aggressive": 192.87
+    },
+    {
+      "date": "2026-08-31",
+      "conservative": 142.39,
+      "steady": 157.39,
+      "balanced": 168.07,
+      "growth": 180.16,
+      "aggressive": 195.76
+    },
+    {
+      "date": "2026-09-30",
+      "conservative": 140.63,
+      "steady": 154.84,
+      "balanced": 164.68,
+      "growth": 176.0,
+      "aggressive": 190.92
+    }
+  ],
+  "methodology": {
+    "frequency": "月末数据计算相关性、组合收益与年化波动；日度数据计算单项资产最大回撤。",
+    "rmbPerspective": "所有代表工具均以人民币净值观察；海外权益、海外 REITs 和黄金的路径因此同时包含底层资产与人民币汇率影响。",
+    "chinaBlend": "中国权益历史代理按 70% 沪深300ETF + 30% 恒生ETF 的月度收益组合。",
+    "cashAssumption": "组合回测中的现金收益按 0% 处理，避免用当前货币基金收益倒推过去；因此稳健组合历史收益可能被低估。",
+    "returnBasis": "ETF 与 REITs 代表均使用累计净值，尽量把分红影响纳入历史路径；结果仍未扣除个人交易成本、税费、申赎与场内折溢价影响。",
+    "warning": "历史相关性会变化，最大回撤也可能被未来打破；这些数字用于理解风险，不是收益预测。"
+  },
+  "sources": [
+    {
+      "name": "东方财富公开基金与行情接口（经 AkShare 整理）",
+      "url": "https://www.akshare.xyz/data/fund/fund_public.html",
+      "type": "历史价格与净值"
+    },
+    {
+      "name": "中证指数：沪深300指数资料",
+      "url": "https://www.csindex.com.cn/#/indices/family/detail?indexCode=000300",
+      "type": "指数官方"
+    },
+    {
+      "name": "上海证券交易所：历史数据接口说明",
+      "url": "https://www.sseinfo.com/services/assortment/document/interface/c/10747485/files/d054de0ac2094787959b1b32b65ec24a.pdf",
+      "type": "交易所资料"
+    },
+    {
+      "name": "Vanguard：长期资产配置与预测不确定性",
+      "url": "https://corporate.vanguard.com/content/dam/corp/research/pdf/constructing_return_target_portfolios.pdf",
+      "type": "机构研究"
+    }
+  ]
+}

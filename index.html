@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="面向中国个人投资者的全球资产配置观察、资产地图与配置学习工具。" />
+  <title>远见配置｜中国投资者市场总览</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23183b63'/%3E%3Cpath d='M14 42 26 29l9 8 15-18' fill='none' stroke='%23c9a85a' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="daily.css?v=23" />
+</head>
+<body>
+  <header class="site-header"><div class="shell nav-wrap">
+    <a class="brand" href="index.html"><span class="mark">⌁</span><span>远见配置</span></a>
+    <nav aria-label="主导航"><a class="active" href="index.html">市场总览</a><a href="assets.html">资产地图</a><a href="analysis.html">历史验证</a><a href="recommendation.html">我的配置参考</a></nav>
+    <a class="nav-cta" href="recommendation.html">开始测一测</a>
+  </div></header>
+  <main class="shell home">
+    <section class="home-hero">
+      <div class="home-hero-copy">
+        <h1>你的钱，<br />是不是都押在了中国？</h1>
+        <p class="lead">很多家庭的股票、房子和存款，都系在同一个经济体上。回答 11 个问题，看看怎样把一部分钱分散到全球，让大跌来的时候少受一点伤。</p>
+        <div class="home-hero-actions">
+          <a class="primary-button big" href="recommendation.html">开始测一测（约 3 分钟）</a>
+          <a class="text-link" href="analysis.html">先看历史数据</a>
+        </div>
+        <p class="home-hero-fine">不用注册，答案只保存在你自己的设备上。</p>
+      </div>
+
+      <figure class="compare-card" aria-labelledby="compare-title">
+        <figcaption id="compare-title">同样投入 100 元，<span id="compare-start">2017 年底</span>至今</figcaption>
+        <div class="compare-stats">
+          <div class="compare-stat single">
+            <span><i></i>只买沪深 300</span>
+            <strong id="compare-single-end">124 元</strong>
+            <small>途中最深跌了 <b id="compare-single-dd">33%</b></small>
+          </div>
+          <div class="compare-stat mixed">
+            <span><i></i>平衡型分散组合</span>
+            <strong id="compare-mixed-end">165 元</strong>
+            <small>途中最深跌了 <b id="compare-mixed-dd">9%</b></small>
+          </div>
+        </div>
+        <svg id="compare-chart" viewBox="0 0 520 220" role="img" aria-label="只买沪深300与平衡型分散组合的历史走势对比"></svg>
+        <p class="compare-note">按月末数据计算。分散组合含约 40% 现金与人民币债券、45% 中外股票、15% REITs 与黄金。历史不代表未来，海外资产也可能在未来跑输。</p>
+      </figure>
+    </section>
+
+    <section class="home-steps" aria-labelledby="steps-title">
+      <h2 id="steps-title">三步拿到你的配置参考</h2>
+      <ol>
+        <li>
+          <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="32" height="26" rx="5"/><path d="M8 20h32M16 8v8M32 8v8"/></svg>
+          <strong>说说这笔钱</strong>
+          <span>什么时候要用、应急金够不够、未来几年要取多少。</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 34c6-14 12-14 16-6s10 8 16-8"/><path d="M8 40h32"/></svg>
+          <strong>看你能扛多大波动</strong>
+          <span>想承受的和实际能承受的分开算，取更稳的一边。</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15"/><path d="M24 9v15l11 9"/></svg>
+          <strong>拿到比例和买法</strong>
+          <span>六类资产各占多少，以及在国内用什么渠道买到。</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="home-layers" aria-labelledby="layers-title">
+      <div class="home-layers-head">
+        <h2 id="layers-title">一份全球配置，大致分成三层</h2>
+        <p>以平衡型为例。比例会随你的答案变化。</p>
+      </div>
+      <div class="layer-bar" role="img" aria-label="人民币底仓 40%，中国股票 25%，全球分散 35%">
+        <span class="layer base" style="flex:40"><b>40%</b></span>
+        <span class="layer china" style="flex:25"><b>25%</b></span>
+        <span class="layer world" style="flex:35"><b>35%</b></span>
+      </div>
+      <div class="layer-cards">
+        <article class="base"><h3>人民币底仓</h3><p>存款、货币基金、国债。先保证生活和近期用钱，大跌时不用被迫卖出。</p></article>
+        <article class="china"><h3>中国股票</h3><p>A 股和港股宽基，分享中国经济增长。港股也属于中国风险，不算海外分散。</p></article>
+        <article class="world"><h3>全球分散</h3><p>通过 QDII 买美股、其他发达市场、海外 REITs 和黄金，在国内跌的时候提供缓冲。</p></article>
+      </div>
+      <a class="text-link" href="assets.html">每类资产具体是什么、怎么买</a>
+    </section>
+
+    <section class="signal-strip" aria-label="市场信号">
+      <div class="signal-head"><div><p class="eyebrow">今日市场</p><h2>四个和你钱包相关的数字</h2></div><span id="market-status" class="update-status">正在载入数据快照</span></div>
+      <div class="quote-grid">
+        <a class="quote quote-link" href="market-detail.html?id=a-share" aria-label="查看 A 股详细数据">
+          <span>A 股 / 沪深 300</span><strong id="a-share-value">—</strong><small id="a-share-note">载入最新收盘数据</small><em>查看指数与成交详情 →</em>
+        </a>
+        <a class="quote quote-link" href="market-detail.html?id=hong-kong" aria-label="查看港股详细数据">
+          <span>港股 / 恒生科技</span><strong id="hk-value">—</strong><small id="hk-note">载入最新收盘数据</small><em>查看恒指与科技指数 →</em>
+        </a>
+        <a class="quote quote-link" href="market-detail.html?id=fx" aria-label="查看人民币汇率详细数据">
+          <span>美元 / 人民币</span><strong id="usd-cny">—</strong><small id="usd-cny-note">载入人民币中间价</small><em>查看汇率影响路径 →</em>
+        </a>
+        <a class="quote quote-link neutral" href="market-detail.html?id=global-risk" aria-label="查看全球风险变量详细数据">
+          <span>全球风险变量</span><strong id="global-value">—</strong><small id="global-note">载入美债与能源数据</small><em>查看利率与能源详情 →</em>
+        </a>
+      </div>
+      <p class="data-note">公开数据用于学习和观察，可能延迟、缺失或与交易平台不同；请在交易前自行核验报价和规则。<a class="text-link" href="analysis.html">查看十年历史验证</a></p>
+    </section>
+
+    <details class="home-news" id="daily-observation"><summary><span>今日市场观察</span><small id="news-fold-hint">今日消息，以及怎么判断它们和你有没有关系</small></summary><div class="dashboard-grid">
+      <article class="daily-brief panel"><div class="panel-title"><div><p class="eyebrow">每日观察</p><h2>今天发生了什么？</h2></div><span id="news-status" class="update-status">载入中</span></div>
+        <p class="daily-thesis" id="current-regime"><strong>今日主线：</strong>正在载入……</p>
+        <div id="news-list" class="news-list" aria-live="polite"><p class="loading-copy">正在载入今日消息……</p></div>
+        <div class="thinking-prompt"><strong>阅读提示</strong><span>一条新闻会影响哪个资产？影响是短期情绪，还是基本面？你的现有组合是否真的需要改变？</span></div>
+      </article>
+      <aside class="regime-card"><p class="eyebrow">怎么理解消息</p><h2>不要把“消息”当作“指令”</h2><div class="regime-step"><b>01</b><div><strong>先看影响什么</strong><span>利率、增长、通胀、汇率，还是市场情绪？</span></div></div><div class="regime-step"><b>02</b><div><strong>再看与你是否有关</strong><span>它会不会明显影响你持有的资产和用钱时间？</span></div></div><div class="regime-step"><b>03</b><div><strong>最后决定是否行动</strong><span>只有比例明显偏离目标时，才考虑分批调整。</span></div></div>
+      </aside>
+    </div></details>
+
+    <section class="action-panel"><div><h2>看看你的钱该怎么分</h2><p>11 个问题，约 3 分钟。结果是资产大类比例和国内可用的购买渠道，不推荐具体产品。</p></div><a class="primary-button" href="recommendation.html">开始测一测</a></section>
+    <aside class="notice"><strong>重要提醒</strong><span>本站是投资教育与信息整理工具，不构成个性化投资建议、产品推荐或收益承诺。投资有风险；跨境投资还涉及汇率、税务、额度及监管变化。</span></aside>
+  </main>
+  <footer><div class="shell"><span>远见配置 · 中国投资者的全球资产配置</span><span><a href="privacy.html">隐私说明</a> · 为独立思考而设计</span></div></footer>
+  <script src="app.js?v=23"></script>
+</body></html>

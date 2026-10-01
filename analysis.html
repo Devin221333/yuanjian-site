@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="用中国投资者可触达的代表性工具，观察长期收益、波动、最大回撤、相关性和配置组合的历史表现。" />
+  <title>远见配置｜历史数据与组合验证</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23183b63'/%3E%3Cpath d='M14 42 26 29l9 8 15-18' fill='none' stroke='%23c9a85a' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="daily.css?v=23" />
+</head>
+<body>
+  <header class="site-header"><div class="shell nav-wrap">
+    <a class="brand" href="index.html"><span class="mark">⌁</span><span>远见配置</span></a>
+    <nav aria-label="主导航"><a href="index.html">市场总览</a><a href="assets.html">资产地图</a><a class="active" href="analysis.html">历史验证</a><a href="recommendation.html">我的配置参考</a></nav>
+    <a class="nav-cta" href="recommendation.html">开始测一测</a>
+  </div></header>
+
+  <main id="history-lab" class="shell history-page">
+    <section class="history-hero">
+      <h1>过去十年，拿着它最难熬的时候是什么样？</h1>
+      <p class="lead">历史不能预测未来，但能告诉你：一类资产涨得多的时候，通常也跌得深；混在一起，过程会平稳很多。</p>
+      <p class="history-window" id="history-common-window">正在读取数据区间</p>
+    </section>
+
+    <section class="history-block chart-block" aria-labelledby="chart-title">
+      <div class="block-head"><h2 id="chart-title">100 元放进去，后来变成多少？</h2><p>最多同时对比 4 条线。<span class="hint-desktop">鼠标移到图上看每个月的数值。</span><span class="hint-mobile">手指在图上左右滑动看数值。</span></p></div>
+      <div class="series-picker" id="series-picker" role="group" aria-label="选择对比对象"></div>
+      <div class="history-chart-box" id="history-chart-box">
+        <svg id="history-line-chart" role="img" aria-label="历史走势对比图"></svg>
+        <div class="chart-tooltip" id="chart-tooltip" hidden></div>
+      </div>
+      <div class="series-summary" id="series-summary"></div>
+    </section>
+
+    <section class="history-block" aria-labelledby="tradeoff-title">
+      <div class="block-head"><h2 id="tradeoff-title">每年赚多少，途中最深跌多少</h2><p>按 A 股习惯，红色是涨，绿色是跌。左边是历史上从高点跌到低点的最大幅度，右边是年化收益。</p></div>
+      <div class="tradeoff" id="tradeoff-assets"></div>
+    </section>
+
+    <section class="history-block" aria-labelledby="ladder-title">
+      <div class="block-head"><h2 id="ladder-title">五种组合：越进取，涨得越多，也跌得越深</h2><p id="backtest-window">同一段历史</p></div>
+      <div class="tradeoff ladder" id="tradeoff-profiles"></div>
+      <p class="block-note">现金收益保守按 0% 计算，现金多的组合可能被低估；按月末数据计算，未计交易成本和税费。</p>
+    </section>
+
+    <section class="history-block" aria-labelledby="corr-title">
+      <div class="block-head"><h2 id="corr-title">哪些资产会一起涨跌？</h2><p>越能互相缓冲的资产放在一起，组合越平稳。</p></div>
+      <div class="corr-layout">
+        <div class="corr-pairs" id="corr-pairs"></div>
+        <div class="corr-matrix-wrap">
+          <div id="correlation-matrix" class="correlation-matrix" aria-label="资产相关性矩阵"><span>载入中</span></div>
+          <div class="correlation-scale"><span>互相缓冲</span><i></i><span>一起涨跌</span></div>
+        </div>
+      </div>
+    </section>
+
+    <details class="sources-fold history-fold">
+      <summary><strong>这些数字怎么算的，不能回答什么</strong><span>口径、局限与来源</span></summary>
+      <ul class="boundary-list"><li>不预测明天、下周或下个月的涨跌。</li><li>不假设过去收益最高的资产未来仍然领先。</li><li>不把短期新闻转成买卖信号。</li><li>没有纳入你的税务、真实成交价和账户费用。</li></ul>
+      <div id="history-methodology-copy" class="method-copy"></div>
+      <div class="methodology-links" id="history-sources"></div>
+    </details>
+
+    <section class="action-panel"><div><h2>用这些历史风险，看看你的组合</h2><p>答 11 个问题，看看哪一档的回撤你真正拿得住。</p></div><a class="primary-button" href="recommendation.html">开始测一测</a></section>
+    <aside class="notice"><strong>重要提醒</strong><span>历史表现不代表未来结果。最大回撤可能在未来被突破，相关性也会在危机中发生变化。页面仅用于投资教育，不构成产品推荐、交易指令或收益承诺。</span></aside>
+  </main>
+
+  <footer><div class="shell"><span>远见配置 · 中国投资者的全球资产配置</span><span><a href="privacy.html">隐私说明</a> · 为独立思考而设计</span></div></footer>
+  <script src="app.js?v=23"></script>
+</body>
+</html>

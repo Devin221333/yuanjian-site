@@ -1,0 +1,197 @@
+{
+  "updatedAt": "2026-09-30",
+  "scope": "把资产大类目标比例拆成可由中国个人投资者理解和执行的细分模块；不直接给出买入代码。",
+  "buckets": {
+    "cash": {
+      "title": "人民币现金与短债",
+      "rule": "先满足到账速度和用款期限，再比较收益率。",
+      "components": [
+        {
+          "id": "emergency-cash",
+          "name": "银行存款 / 应急现金",
+          "shares": [60, 60, 60, 60, 60],
+          "vehicle": "银行存款、活期或期限匹配的定期存款",
+          "filter": "到账速度、提前支取规则、单家银行存款保险范围",
+          "detailId": "rmb-cash",
+          "accessType": "domestic"
+        },
+        {
+          "id": "money-short",
+          "name": "货币基金 / 短债工具",
+          "shares": [40, 40, 40, 40, 40],
+          "vehicle": "境内货币基金、短期国债或短债基金",
+          "filter": "赎回到账、久期、信用风险、管理费与销售服务费",
+          "detailId": "money-market",
+          "accessType": "domestic"
+        }
+      ]
+    },
+    "bonds": {
+      "title": "人民币优质债券",
+      "rule": "以国债和高等级信用为主，避免为了票息承担看不懂的信用风险。",
+      "components": [
+        {
+          "id": "government-bond",
+          "name": "国债 / 政策性金融债",
+          "shares": [60, 55, 50, 45, 40],
+          "vehicle": "储蓄国债、利率债基金或国债 ETF",
+          "filter": "期限、久期、净值波动、提前兑取或交易规则",
+          "detailId": "savings-treasury",
+          "accessType": "domestic"
+        },
+        {
+          "id": "high-grade-credit",
+          "name": "高等级信用债",
+          "shares": [25, 30, 35, 40, 45],
+          "vehicle": "境内高等级信用债基金",
+          "filter": "信用等级、行业集中、久期、回撤与基金费用",
+          "detailId": "rmb-high-grade-bond",
+          "accessType": "domestic"
+        },
+        {
+          "id": "short-duration",
+          "name": "短久期稳定层",
+          "shares": [15, 15, 15, 15, 15],
+          "vehicle": "短债基金、短期国债或大额存单",
+          "filter": "平均剩余期限、流动性、信用下沉程度",
+          "detailId": "book-entry-treasury",
+          "accessType": "domestic"
+        }
+      ]
+    },
+    "china": {
+      "title": "中国权益（A 股 / 港股）",
+      "rule": "宽基承担核心，风格和港股只做补充，避免行业主题成为组合主体。",
+      "components": [
+        {
+          "id": "a-large",
+          "name": "A 股大盘宽基",
+          "shares": [60, 55, 45, 40, 35],
+          "vehicle": "沪深300、中证A系列等宽基指数基金 / ETF",
+          "filter": "规模、日均成交、费率、跟踪误差与指数集中度",
+          "detailId": "a-share-broad",
+          "accessType": "domestic"
+        },
+        {
+          "id": "a-mid-small",
+          "name": "A 股中小盘宽基",
+          "shares": [5, 10, 20, 25, 30],
+          "vehicle": "中证500、中证1000等宽基指数基金 / ETF",
+          "filter": "波动、估值、规模与流动性，避免与已有小盘持仓重复",
+          "detailId": "a-share-broad",
+          "accessType": "domestic"
+        },
+        {
+          "id": "a-dividend",
+          "name": "红利 / 价值风格",
+          "shares": [20, 20, 15, 10, 10],
+          "vehicle": "境内红利或价值指数基金 / ETF",
+          "filter": "行业集中、股息可持续性、估值与换手率",
+          "detailId": "a-share-dividend",
+          "accessType": "domestic"
+        },
+        {
+          "id": "hk-broad",
+          "name": "港股宽基",
+          "shares": [15, 15, 20, 25, 25],
+          "vehicle": "港股通 ETF、境内港股指数基金或 QDII",
+          "filter": "交易日差异、红利税、汇率、额度与场内折溢价",
+          "detailId": "hk-broad",
+          "accessType": "hongKong"
+        }
+      ]
+    },
+    "global": {
+      "title": "全球权益（QDII 等）",
+      "rule": "先用宽基分散国家和行业，再考虑是否需要单独增加新兴市场。",
+      "components": [
+        {
+          "id": "us-broad",
+          "name": "美国宽基",
+          "shares": [60, 55, 50, 50, 45],
+          "vehicle": "境内 QDII 指数基金 / ETF，或合规境外宽基工具",
+          "filter": "QDII 额度、折溢价、费率、跟踪误差与人民币汇率影响",
+          "detailId": "us-equity",
+          "accessType": "foreign"
+        },
+        {
+          "id": "developed-ex-us",
+          "name": "其他发达市场",
+          "shares": [30, 30, 30, 30, 30],
+          "vehicle": "覆盖欧洲、日本等市场的全球或发达市场 QDII",
+          "filter": "地区覆盖是否重复、基金规模、费率和跟踪基准",
+          "detailId": "developed-equity",
+          "accessType": "foreign"
+        },
+        {
+          "id": "emerging-market",
+          "name": "新兴市场",
+          "shares": [10, 15, 20, 20, 25],
+          "vehicle": "新兴市场或全球全市场 QDII",
+          "filter": "是否重复持有中国、国家集中、汇率和流动性",
+          "detailId": "emerging-equity",
+          "accessType": "foreign"
+        }
+      ]
+    },
+    "reits": {
+      "title": "REITs / 基础设施",
+      "rule": "家庭房产已经较多时保持低比例；REITs 有净值波动，不等于固定收益。",
+      "components": [
+        {
+          "id": "china-reits",
+          "name": "中国公募 REITs",
+          "shares": [70, 70, 65, 60, 60],
+          "vehicle": "境内公募 REITs 或覆盖其组合的公募基金",
+          "filter": "底层项目、剩余期限、分派率来源、估值与流动性",
+          "detailId": "china-reits",
+          "accessType": "domestic"
+        },
+        {
+          "id": "global-reits",
+          "name": "全球 REITs",
+          "shares": [30, 30, 35, 40, 40],
+          "vehicle": "境内 QDII REITs 基金或合规境外 REITs 工具",
+          "filter": "利率敏感度、地区与物业类型、费率和汇率风险",
+          "detailId": "global-reits",
+          "accessType": "foreign"
+        }
+      ]
+    },
+    "gold": {
+      "title": "黄金 / 商品",
+      "rule": "以黄金承担主要分散职责，综合商品只在能理解期货展期等风险时使用。",
+      "components": [
+        {
+          "id": "gold-core",
+          "name": "黄金核心",
+          "shares": [100, 90, 85, 80, 75],
+          "vehicle": "境内黄金 ETF、积存金或合规黄金基金",
+          "filter": "底层是否为实物黄金、费率、点差、流动性与保管方式",
+          "detailId": "gold",
+          "accessType": "domestic"
+        },
+        {
+          "id": "broad-commodities",
+          "name": "综合商品补充",
+          "shares": [0, 10, 15, 20, 25],
+          "vehicle": "境内商品公募、商品 QDII 或合规期货类工具",
+          "filter": "期货展期、品种权重、杠杆、费率与跟踪误差",
+          "detailId": "broad-commodities",
+          "accessType": "foreign"
+        }
+      ]
+    }
+  },
+  "productChecklist": [
+    { "label": "底层是否一致", "detail": "产品名称相似，不代表跟踪同一个指数或持有同一类资产。" },
+    { "label": "长期成本", "detail": "比较管理费、托管费、销售服务费、交易佣金和申赎费用。" },
+    { "label": "跟踪质量", "detail": "指数产品同时看跟踪误差、规模、成交量和场内折溢价。" },
+    { "label": "渠道限制", "detail": "QDII 还要核验额度、申购状态、汇率口径和交易日差异。" }
+  ],
+  "satellitePolicy": {
+    "default": "核心组合默认不配置个股和行业主题。",
+    "limit": "如未来增加卫星仓，个股与行业主题合计建议控制在风险资产的 10% 以内。",
+    "funding": "卫星仓从权益目标比例中划出，不能占用应急金、三年内用款或人民币稳定层。"
+  }
+}

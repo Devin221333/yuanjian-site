@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="用固定频率和偏离阈值复核资产配置，避免被短期消息牵着走。" />
+  <title>远见配置｜第三步：定期复核</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23183b63'/%3E%3Cpath d='M14 42 26 29l9 8 15-18' fill='none' stroke='%23c9a85a' stroke-width='5'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="daily.css?v=23" />
+</head>
+<body data-allocation-page="review">
+  <header class="site-header"><div class="shell nav-wrap">
+    <a class="brand" href="index.html"><span class="mark">⌁</span><span>远见配置</span></a>
+    <nav aria-label="主导航"><a href="index.html">市场总览</a><a href="assets.html">资产地图</a><a href="analysis.html">历史验证</a><a class="active" href="recommendation.html">我的配置参考</a></nav>
+    <a class="nav-cta" href="assets.html">看资产地图</a>
+  </div></header>
+
+  <main class="shell allocation-wizard">
+    <section class="wizard-heading"><div><p class="eyebrow">配置参考 · 第 3 步</p><h1>半年检查一次，平时不要频繁动</h1><p>只有个人情况改变或资产明显偏离目标时，才需要考虑调整。</p></div><span class="wizard-time">每半年一次</span></section>
+    <nav class="recommendation-flow wizard-flow" aria-label="配置参考流程">
+      <a href="recommendation.html"><b>01</b> 回答问题</a><i></i><a href="portfolio.html"><b>02</b> 你的组合</a><i></i><span class="active" aria-current="step"><b>03</b> 定期复核</span>
+    </nav>
+
+    <section class="review-hero wizard-card">
+      <div><p class="eyebrow">你的复核规则</p><h2 id="review-profile">正在读取组合</h2><p id="review-rule">正在生成复核频率……</p></div>
+      <div class="review-trigger"><span>调整触发线</span><strong id="review-trigger">偏离 5 个百分点</strong><small>优先用新增资金补低配资产</small></div>
+    </section>
+
+    <section class="review-layout">
+      <div class="wizard-card review-checklist">
+        <p class="eyebrow">四项检查</p><h2>复核时只检查四件事</h2>
+        <label><input type="checkbox" /> <span><strong>资金期限变了吗？</strong><small>未来三年的确定支出是否增加。</small></span></label>
+        <label><input type="checkbox" /> <span><strong>财务承受力变了吗？</strong><small>应急金、收入稳定性或债务压力是否恶化。</small></span></label>
+        <label><input type="checkbox" /> <span><strong>可用渠道变了吗？</strong><small>QDII、港股通或境外账户条件是否变化。</small></span></label>
+        <label><input type="checkbox" /> <span><strong>比例真的越线了吗？</strong><small>只看与目标比例的偏离，不因短期涨跌追涨杀跌。</small></span></label>
+      </div>
+
+      <aside class="wizard-card review-target-panel">
+        <p class="eyebrow">目标快照</p><h2>本次目标比例</h2><div id="review-targets" class="review-targets"><p>正在载入……</p></div>
+        <a class="text-link" href="portfolio.html">返回查看完整组合</a>
+      </aside>
+    </section>
+
+    <section class="review-decision wizard-card"><p class="eyebrow">调整顺序</p><h2>需要调整时，按这个顺序</h2><ol><li><b>先补缺口</b><span>优先用新增资金买入低配资产。</span></li><li><b>再做交换</b><span>新增资金不够时，才考虑卖出高配资产。</span></li><li><b>最后换产品</b><span>只有费用、跟踪、流动性或渠道发生实质变化时才更换载体。</span></li></ol></section>
+
+    <div class="wizard-bottom-actions"><a class="wizard-back" href="portfolio.html">返回组合</a><a class="primary-button" href="recommendation.html">重新测评</a></div>
+    <aside class="wizard-note"><strong>市场消息的角色</strong><span>消息用来解释风险环境和检查假设，不直接触发战略比例变化。真正的调整依据仍是个人边界与偏离阈值。</span></aside>
+  </main>
+
+  <footer><div class="shell"><span>远见配置 · 中国投资者的全球资产配置</span><span><a href="privacy.html">隐私说明</a> · 教育用途 · 非交易指令</span></div></footer>
+  <script src="app.js?v=23"></script>
+</body>
+</html>

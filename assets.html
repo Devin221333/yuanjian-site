@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="查询普通中国内地投资者能够触达的境内、港股与海外资产，以及对应合规渠道。" />
+  <title>远见配置｜资产地图</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23183b63'/%3E%3Cpath d='M14 42 26 29l9 8 15-18' fill='none' stroke='%23c9a85a' stroke-width='5'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="daily.css?v=23" />
+</head>
+<body>
+  <header class="site-header"><div class="shell nav-wrap">
+    <a class="brand" href="index.html"><span class="mark">⌁</span><span>远见配置</span></a>
+    <nav aria-label="主导航"><a href="index.html">市场总览</a><a class="active" href="assets.html">资产地图</a><a href="analysis.html">历史验证</a><a href="recommendation.html">我的配置参考</a></nav>
+    <a class="nav-cta" href="recommendation.html">开始测一测</a>
+  </div></header>
+
+  <main class="shell assets-page">
+    <section class="assets-hero">
+      <h1>18 类资产，国内都能买到</h1>
+      <p class="lead">按风险从低到高排好了。点任意一个，看它在组合里负责什么、在国内怎么买。</p>
+      <p class="assets-scope">只收录普通内地投资者用境内账户、港股通和 QDII 能触达的类型，不含境外券商、私募和杠杆衍生品。<span id="database-date">数据日期：载入中</span></p>
+    </section>
+
+    <section class="asset-explorer" aria-labelledby="explorer-title">
+      <h2 id="explorer-title" class="visually-hidden">资产查询</h2>
+      <div class="explorer-toolbar">
+        <label class="explorer-search"><span class="visually-hidden">搜索</span><input id="database-search" type="search" placeholder="搜索：美股、国债、黄金、QDII…" autocomplete="off" /></label>
+        <label class="beginner-toggle"><input id="beginner-only" type="checkbox" /><span>只看入门</span></label>
+        <strong id="database-count" class="explorer-count">载入中</strong>
+      </div>
+
+      <div id="assets-view" class="explorer-view">
+        <div class="group-chips" id="group-chips" role="group" aria-label="按类别筛选"></div>
+        <div class="explorer-body">
+          <div class="explorer-main">
+            <div id="asset-matrix" class="asset-matrix" aria-label="资产风险地图"></div>
+            <div id="asset-list" class="asset-list"></div>
+            <div id="database-empty" class="database-empty" hidden><strong>没有找到对应资产</strong><span>换个更宽泛的词，或关掉“只看入门”。</span></div>
+          </div>
+          <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+          <aside id="asset-panel" class="asset-panel" aria-live="polite" tabindex="-1">
+            <p class="panel-empty">点左边任意一个资产，这里会显示它的说明。</p>
+          </aside>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="china-pathway"><div class="section-title"><div><h2>挑具体产品前，先做四个判断</h2></div></div><ol class="pathway-steps">
+      <li><strong>先定职责</strong><span>这笔钱要流动性、稳定收益、长期增长，还是对冲风险？</span></li>
+      <li><strong>再定市场</strong><span>中国之外，是否真的需要港股、美国或其他地区？</span></li>
+      <li><strong>然后选渠道</strong><span>ETF、场外基金、港股通、QDII 的门槛、价格和到账时间都不同。</span></li>
+      <li><strong>最后核验产品</strong><span>看费用、跟踪误差、额度、溢价和流动性。</span></li>
+    </ol></section>
+
+    <section class="reflection-panel"><div><h2>先写下自己的限制</h2><p>记下目标、不能承受的风险和已有的集中度，能帮你判断哪些资产根本不需要买。</p><ul><li>人民币应急金是否足够？</li><li>收入、房产与持仓是否集中在同一行业？</li><li>配置海外资产，是为了增长还是分散？</li></ul></div><div class="notes-box"><label for="investment-note">我的配置思考</label><textarea id="investment-note" placeholder="例如：未来三年需要准备首付；海外部分只用于降低单一市场风险……"></textarea><div><span id="note-state">笔记只保存在这台设备上</span><button id="save-note" class="secondary-button" type="button">保存我的笔记</button></div></div></section>
+
+    <details class="sources-fold"><summary><strong>数据从哪里来？</strong><span>监管机构、政府部门与交易所的一手信息</span></summary><p>渠道规则和产品状态会变化，交易前应再次打开官方页面核验。</p><div id="official-sources" class="source-list"><span>正在载入官方来源……</span></div></details>
+
+    <aside class="notice"><strong>重要提醒</strong><span>资产库按资产类型和渠道规则整理，不构成具体基金、股票或债券推荐。额度、标的资格、费用、税务和申赎状态可能变化，请以最新官方公告与产品法律文件为准。</span></aside>
+  </main>
+  <footer><div class="shell"><span>远见配置 · 中国投资者的全球资产配置</span><span><a href="privacy.html">隐私说明</a> · 为独立思考而设计</span></div></footer>
+  <script src="app.js?v=23"></script>
+</body>
+</html>

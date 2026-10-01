@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="回答 11 个问题，看看你的钱适合怎样在人民币资产和全球资产之间分配。" />
+  <title>远见配置｜第一步：回答问题</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23183b63'/%3E%3Cpath d='M14 42 26 29l9 8 15-18' fill='none' stroke='%23c9a85a' stroke-width='5'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css?v=23" />
+  <link rel="stylesheet" href="daily.css?v=23" />
+</head>
+<body data-allocation-page="quiz">
+  <header class="site-header"><div class="shell nav-wrap">
+    <a class="brand" href="index.html"><span class="mark">⌁</span><span>远见配置</span></a>
+    <nav aria-label="主导航"><a href="index.html">市场总览</a><a href="assets.html">资产地图</a><a href="analysis.html">历史验证</a><a class="active" href="recommendation.html">我的配置参考</a></nav>
+    <a class="nav-cta" href="assets.html">看资产地图</a>
+  </div></header>
+
+  <main class="shell allocation-wizard quiz-page">
+    <section class="wizard-heading"><div><p class="eyebrow">配置参考 · 第 1 步</p><h1>回答 11 个问题</h1><p>先看这笔钱的用途和你的家底，再看你能扛多大波动。右边会实时显示结果。</p></div><span class="wizard-time">约 3 分钟</span></section>
+    <nav class="recommendation-flow wizard-flow" aria-label="配置参考流程">
+      <span class="active" aria-current="step"><b>01</b> 回答问题</span><i></i><span><b>02</b> 你的组合</span><i></i><span><b>03</b> 定期复核</span>
+    </nav>
+    <div class="quiz-mobile-progress" aria-hidden="true"><span>已回答 <b class="quiz-count">0</b> / 11</span><i><em class="quiz-bar"></em></i></div>
+
+    <div class="quiz-layout">
+      <form id="quiz-form" class="quiz-form" novalidate>
+<section class="quiz-section"><header><span>1</span><div><h2>这笔钱打算怎么用</h2><p>短期要用的钱，不该承担长期波动。</p></div></header>
+<fieldset class="quiz-q " data-q="horizon"><legend>这笔钱最早什么时候可能要用？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="horizon" value="under3" /><span><strong>3 年以内</strong></span></label><label class="quiz-option"><input type="radio" name="horizon" value="threeToFive" /><span><strong>3–5 年</strong></span></label><label class="quiz-option"><input type="radio" name="horizon" value="fiveToTen" /><span><strong>5–10 年</strong></span></label><label class="quiz-option"><input type="radio" name="horizon" value="overTen" /><span><strong>10 年以上</strong></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="goal"><legend>它最重要的任务是什么？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="goal" value="preserve" /><span><strong>保住本金</strong><small>少亏比多赚重要</small></span></label><label class="quiz-option"><input type="radio" name="goal" value="steady" /><span><strong>稳健积累</strong><small>为将来的支出攒钱</small></span></label><label class="quiz-option"><input type="radio" name="goal" value="growth" /><span><strong>长期增长</strong><small>能等，想要更高回报</small></span></label><label class="quiz-option"><input type="radio" name="goal" value="income" /><span><strong>补充现金流</strong><small>希望定期有收入</small></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="withdrawal"><legend>未来 3 年，计划从里面取出多少？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="withdrawal" value="none" /><span><strong>基本不取</strong></span></label><label class="quiz-option"><input type="radio" name="withdrawal" value="under20" /><span><strong>少于 20%</strong></span></label><label class="quiz-option"><input type="radio" name="withdrawal" value="twentyToFifty" /><span><strong>20%–50%</strong></span></label><label class="quiz-option"><input type="radio" name="withdrawal" value="overFifty" /><span><strong>一半以上</strong></span></label></div></fieldset>
+</section>
+<section class="quiz-section"><header><span>2</span><div><h2>你的家底稳不稳</h2><p>这些决定你实际能承受多大波动。</p></div></header>
+<fieldset class="quiz-q " data-q="emergency"><legend>家里的应急金，够撑多久的必要开支？</legend><p class="quiz-hint">不算这笔投资的钱。</p><div class="quiz-options"><label class="quiz-option"><input type="radio" name="emergency" value="under3" /><span><strong>不到 3 个月</strong></span></label><label class="quiz-option"><input type="radio" name="emergency" value="threeToSix" /><span><strong>3–6 个月</strong></span></label><label class="quiz-option"><input type="radio" name="emergency" value="sixToTwelve" /><span><strong>6–12 个月</strong></span></label><label class="quiz-option"><input type="radio" name="emergency" value="overTwelve" /><span><strong>12 个月以上</strong></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="stability"><legend>收入和负债情况？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="stability" value="fragile" /><span><strong>收入不稳 / 负债重</strong></span></label><label class="quiz-option"><input type="radio" name="stability" value="normal" /><span><strong>收入尚稳 / 负债可控</strong></span></label><label class="quiz-option"><input type="radio" name="stability" value="strong" /><span><strong>收入稳定 / 几乎没负债</strong></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="concentration"><legend>你已有的资产，最集中在哪里？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="concentration" value="none" /><span><strong>不明显 / 不确定</strong></span></label><label class="quiz-option"><input type="radio" name="concentration" value="property" /><span><strong>房产占大头</strong></span></label><label class="quiz-option"><input type="radio" name="concentration" value="chinaEquity" /><span><strong>A 股或单一行业</strong></span></label><label class="quiz-option"><input type="radio" name="concentration" value="incomeChina" /><span><strong>工作收入和中国经济绑得很紧</strong></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="currencyNeed"><legend>未来 5 年，大部分开销用什么货币？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="currencyNeed" value="rmb" /><span><strong>基本都是人民币</strong></span></label><label class="quiz-option"><input type="radio" name="currencyNeed" value="mixed" /><span><strong>人民币为主，有些外币</strong></span></label><label class="quiz-option"><input type="radio" name="currencyNeed" value="foreign" /><span><strong>有较大的外币支出</strong><small>如留学、海外置业</small></span></label></div></fieldset>
+</section>
+<section class="quiz-section"><header><span>3</span><div><h2>跌的时候你会怎么做</h2><p>请按真实反应选，不是理想中的自己。</p></div></header>
+<fieldset class="quiz-q wide" data-q="drawdown"><legend>一年内账面跌多少，你还能按计划拿着？</legend><p class="quiz-hint">以投入 10 万元为例。</p><div class="quiz-options"><label class="quiz-option"><input type="radio" name="drawdown" value="five" /><span><strong>约 5%</strong><small>10 万变 9.5 万</small></span></label><label class="quiz-option"><input type="radio" name="drawdown" value="ten" /><span><strong>约 10%</strong><small>10 万变 9 万</small></span></label><label class="quiz-option"><input type="radio" name="drawdown" value="twenty" /><span><strong>约 20%</strong><small>10 万变 8 万</small></span></label><label class="quiz-option"><input type="radio" name="drawdown" value="thirty" /><span><strong>约 30%</strong><small>10 万变 7 万</small></span></label><label class="quiz-option"><input type="radio" name="drawdown" value="forty" /><span><strong>40% 以上</strong><small>10 万变 6 万以下</small></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="reaction"><legend>如果股市跌了 20%，你最可能？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="reaction" value="sellAll" /><span><strong>全部卖掉，先止损</strong></span></label><label class="quiz-option"><input type="radio" name="reaction" value="sellSome" /><span><strong>卖掉一部分</strong></span></label><label class="quiz-option"><input type="radio" name="reaction" value="hold" /><span><strong>继续拿着</strong></span></label><label class="quiz-option"><input type="radio" name="reaction" value="buy" /><span><strong>按计划补仓</strong></span></label></div></fieldset>
+<fieldset class="quiz-q " data-q="experience"><legend>你亲身经历过哪种投资波动？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="experience" value="cash" /><span><strong>主要是存款和理财</strong></span></label><label class="quiz-option"><input type="radio" name="experience" value="funds" /><span><strong>买过债基或混合基金</strong></span></label><label class="quiz-option"><input type="radio" name="experience" value="stocks" /><span><strong>经历过 A 股或港股完整涨跌</strong></span></label><label class="quiz-option"><input type="radio" name="experience" value="global" /><span><strong>投资过多个市场、多种货币</strong></span></label></div></fieldset>
+</section>
+<section class="quiz-section"><header><span>4</span><div><h2>你能用哪些渠道</h2><p>只安排你现在真正能用的合规渠道。</p></div></header>
+<fieldset class="quiz-q " data-q="access"><legend>你目前愿意用哪些渠道？</legend><div class="quiz-options"><label class="quiz-option"><input type="radio" name="access" value="domestic" /><span><strong>只用境内账户</strong><small>含公募基金和 QDII</small></span></label><label class="quiz-option"><input type="radio" name="access" value="connect" /><span><strong>境内账户 + 港股通</strong><small>港股通通常需 50 万资产门槛</small></span></label><label class="quiz-option"><input type="radio" name="access" value="global" /><span><strong>还有合规境外账户</strong></span></label><label class="quiz-option"><input type="radio" name="access" value="noOverseas" /><span><strong>暂不配置海外资产</strong></span></label></div></fieldset>
+</section>
+        <div class="quiz-submit-row"><span>答案只保存在这台设备的浏览器中。</span><a class="primary-button big quiz-submit" href="portfolio.html">生成我的组合</a></div>
+      </form>
+
+      <aside class="quiz-preview" aria-live="polite">
+        <div class="quiz-progress"><span>已回答 <b class="quiz-count">0</b> / 11</span><i><em class="quiz-bar"></em></i></div>
+        <div class="meter-row" id="tolerance-meter"><div><span>想承受的风险</span><small>来自第 3 组问题</small></div><div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><strong>—</strong></div>
+        <div class="meter-row" id="capacity-meter"><div><span>能承受的风险</span><small>来自第 1、2 组问题</small></div><div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><strong>—</strong></div>
+        <div class="quiz-verdict">
+          <span>你的画像</span>
+          <strong id="quiz-profile-name">答完后显示</strong>
+          <p id="quiz-profile-reason">两项取更谨慎的一边，用钱时间和应急金还有一票否决权。</p>
+          <div class="mini-bar" id="quiz-mini-bar" hidden></div>
+          <div class="mini-legend" id="quiz-mini-legend" hidden></div>
+        </div>
+        <a class="primary-button quiz-submit" href="portfolio.html">生成我的组合</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer><div class="shell"><span>远见配置 · 中国投资者的全球资产配置</span><span><a href="privacy.html">隐私说明</a> · 教育用途 · 非交易指令</span></div></footer>
+  <script src="app.js?v=23"></script>
+</body>
+</html>

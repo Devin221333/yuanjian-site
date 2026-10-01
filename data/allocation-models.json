@@ -1,0 +1,144 @@
+{
+  "updatedAt": "2026-09-30",
+  "scope": "面向以人民币生活为主、通过境内公募、QDII、港股通或合规境外账户投资的中国个人投资者。",
+  "buckets": [
+    {
+      "id": "cash",
+      "name": "人民币现金与短债",
+      "shortName": "现金 / 短债",
+      "color": "#176a8d",
+      "role": "流动性与再平衡缓冲",
+      "detail": "应急金、货币基金、短期国债等，重点是到账速度、期限与本金波动。",
+      "links": [
+        { "label": "人民币现金", "id": "rmb-cash" },
+        { "label": "货币基金", "id": "money-market" }
+      ]
+    },
+    {
+      "id": "bonds",
+      "name": "人民币优质债券",
+      "shortName": "人民币债券",
+      "color": "#4d8f88",
+      "role": "票息、防守与本币负债匹配",
+      "detail": "储蓄国债、高等级信用债或利率债，不同期限仍会有净值波动。",
+      "links": [
+        { "label": "储蓄国债", "id": "savings-treasury" },
+        { "label": "高等级债", "id": "rmb-high-grade-bond" }
+      ]
+    },
+    {
+      "id": "china",
+      "name": "中国权益（A 股 / 港股）",
+      "shortName": "中国权益",
+      "color": "#75879b",
+      "role": "人民币相关的长期增长核心",
+      "detail": "用宽基分散公司与行业；港股仍受中国基本面影响，不等于海外分散。",
+      "links": [
+        { "label": "A 股宽基", "id": "a-share-broad" },
+        { "label": "港股宽基", "id": "hk-broad" }
+      ]
+    },
+    {
+      "id": "global",
+      "name": "全球权益（QDII 等）",
+      "shortName": "全球权益",
+      "color": "#6c5c9a",
+      "role": "地区、行业与货币分散",
+      "detail": "通过合规 QDII 等渠道触达海外市场，同时承担估值、汇率与渠道风险。",
+      "links": [
+        { "label": "美股宽基", "id": "us-equity" },
+        { "label": "发达市场", "id": "developed-equity" }
+      ]
+    },
+    {
+      "id": "reits",
+      "name": "REITs / 基础设施",
+      "shortName": "REITs",
+      "color": "#c49946",
+      "role": "实物资产现金流补充",
+      "detail": "收益与利率、经营现金流和资产估值有关；不是固定收益，也不保证分红。",
+      "links": [
+        { "label": "中国公募 REITs", "id": "china-reits" },
+        { "label": "全球 REITs", "id": "global-reits" }
+      ]
+    },
+    {
+      "id": "gold",
+      "name": "黄金 / 商品",
+      "shortName": "黄金 / 商品",
+      "color": "#a96f52",
+      "role": "通胀、地缘与尾部风险分散",
+      "detail": "不产生稳定现金流，价格也会大幅波动，适合做小比例分散而非保本替代。",
+      "links": [
+        { "label": "黄金", "id": "gold" },
+        { "label": "综合商品", "id": "broad-commodities" }
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "level": 1,
+      "id": "conservative",
+      "name": "保守型",
+      "description": "先守住流动性与本金波动边界",
+      "stress": "约 -8% 至 -15%",
+      "review": "每 6 个月检查，重大用款变化时立即复核",
+      "base": { "cash": 30, "bonds": 40, "china": 10, "global": 5, "reits": 5, "gold": 10 }
+    },
+    {
+      "level": 2,
+      "id": "steady",
+      "name": "稳健型",
+      "description": "稳定层为主，保留有限增长来源",
+      "stress": "约 -12% 至 -20%",
+      "review": "每 6 个月检查，偏离目标 5 个百分点再平衡",
+      "base": { "cash": 20, "bonds": 35, "china": 17, "global": 13, "reits": 5, "gold": 10 }
+    },
+    {
+      "level": 3,
+      "id": "balanced",
+      "name": "平衡型",
+      "description": "在长期增长与回撤控制之间保持平衡",
+      "stress": "约 -18% 至 -28%",
+      "review": "每 6 个月检查，偏离目标 5 个百分点再平衡",
+      "base": { "cash": 12, "bonds": 28, "china": 25, "global": 20, "reits": 7, "gold": 8 }
+    },
+    {
+      "level": 4,
+      "id": "growth",
+      "name": "成长型",
+      "description": "以较长持有期换取更高的权益增长暴露",
+      "stress": "约 -25% 至 -35%",
+      "review": "每 6 个月检查，偏离目标 5 个百分点再平衡",
+      "base": { "cash": 8, "bonds": 20, "china": 30, "global": 27, "reits": 7, "gold": 8 }
+    },
+    {
+      "level": 5,
+      "id": "aggressive",
+      "name": "进取型",
+      "description": "权益主导，需要很长持有期与较强承压能力",
+      "stress": "约 -30% 至 -45%",
+      "review": "每 3–6 个月检查，偏离目标 5 个百分点再平衡",
+      "base": { "cash": 5, "bonds": 12, "china": 32, "global": 36, "reits": 7, "gold": 8 }
+    }
+  ],
+  "methodology": {
+    "principle": "分别评估风险意愿与风险能力，以较低者确定起始画像，再用资金期限、近期提款和可执行渠道进行约束。",
+    "marketPolicy": "每日行情、利率、汇率和新闻只用于解释当前环境，不自动改变战略资产比例。",
+    "limitations": "模型未获取完整资产负债表、税务、保险、养老金、家庭责任和具体产品条款，不能替代持牌机构的适当性评估。"
+  },
+  "sources": [
+    {
+      "name": "中国证监会：证券期货投资者适当性管理办法",
+      "url": "https://www.csrc.gov.cn/csrc/c101939/c1045348/1045348/files/%E9%99%84%E4%BB%B61%EF%BC%9A%E8%AF%81%E5%88%B8%E6%9C%9F%E8%B4%A7%E6%8A%95%E8%B5%84%E8%80%85%E9%80%82%E5%BD%93%E6%80%A7%E7%AE%A1%E7%90%86%E5%8A%9E%E6%B3%95.pdf"
+    },
+    {
+      "name": "Autorité des marchés financiers：Your investor profile",
+      "url": "https://lautorite.qc.ca/en/general-public/calculators-and-tools/calculators/your-investor-profile"
+    },
+    {
+      "name": "Charles Schwab：Investor Profile Questionnaire",
+      "url": "https://www.schwab.wallst.com/schwab/retail/guidance/tools/calculators/college/resources/pdf/questionnaire.pdf"
+    }
+  ]
+}
