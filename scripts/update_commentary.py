@@ -4,6 +4,7 @@
   * data/news.json            首页“今日主线”和 3 条消息
   * data/market-details.json  每个市场的 summary（一段话）和 signals（3 条解读）
 
+在 update_market.py 之后运行：成功时覆盖它按数字生成的模板 summary 和通用 signals。
 需要环境变量 ANTHROPIC_API_KEY（在 GitHub 仓库 Settings → Secrets 里添加）。
 没有密钥时直接退出，网站继续显示上一次的文字。
 

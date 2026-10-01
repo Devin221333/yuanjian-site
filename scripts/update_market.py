@@ -228,6 +228,15 @@ def sane(old_text, new_value, kind):
     return abs(new_value / old - 1) <= SANITY[kind]
 
 
+def turnover_update(metric, new_yi, value_text, unit, note):
+    """成交额卡片：新值 + 与前一交易日相比的变化（单位：亿）。"""
+    old = parse_num(metric["value"])
+    if old and "万亿" in metric["value"]:
+        old *= 1e4
+    change = f"较前一交易日 {new_yi - old:+,.0f} 亿{unit}" if old else "当日口径"
+    return {"value": value_text, "change": change, "tone": "flat", "note": note}
+
+
 def find_metric(market, label):
     return next((m for m in market["metrics"] if m["label"] == label), None)
 
@@ -252,18 +261,29 @@ def set_headline(market, value_text, change_text, headline_tone, as_of):
 
 
 # ---------------------------------------------------------------- 免费文字说明
-# 不调用 API，按当天数字用模板拼出每个市场的 summary，保证文字和数字不矛盾。
-# 如果配置了 ANTHROPIC_API_KEY，update_commentary.py 随后会用更丰富的解读覆盖它。
+# 不调用 API，按当天数字用模板拼出每个市场的 summary，只写客观事实，不做判断和预测；
+# signals 换成不依赖当天行情的通用阅读提示，保证文字和数字不矛盾。
+# 如果配置了 ANTHROPIC_API_KEY，update_commentary.py 随后会用它生成的内容覆盖这些模板文字。
 EVERGREEN_SIGNALS = {
     "a-share": [
-        {"title": "别只看一个指数", "body": "沪深 300、上证指数和深证成指覆盖的公司不同，涨跌经常不一致，判断整个市场要多看几个。"},
-        {"title": "成交额看热度", "body": "成交额反映交易活跃程度。上涨如果缺少持续成交配合，持续性通常较弱，但这不是买卖信号。"},
+        {"title": "别只看一个指数", "body": "沪深 300、上证指数和深证成指覆盖的公司不同，涨跌经常不一致，了解整个市场要多看几个。"},
+        {"title": "成交额看热度", "body": "成交额反映交易活跃程度，可以和指数涨跌放在一起看，但它本身不是买卖信号。"},
         {"title": "单日波动很常见", "body": "A 股单日涨跌 1%～2% 很常见，长期配置更应关注估值、盈利和自己能承受多大回撤。"},
     ],
     "hong-kong": [
         {"title": "科技波动更大", "body": "恒生科技指数集中在互联网和科技公司，涨跌幅通常大于恒生指数，对海外利率和情绪更敏感。"},
         {"title": "双重定价", "body": "港股既反映中国企业基本面，也受美元利率、离岸流动性和风险偏好影响。"},
         {"title": "人民币投资体验", "body": "通过港股通投资时以人民币结算，但底层资产仍受港元及全球定价环境影响。"},
+    ],
+    "fx": [
+        {"title": "看清报价方向", "body": "USD/CNY 数值下降通常代表人民币升值；数值上升通常代表人民币贬值。"},
+        {"title": "汇率影响总收益", "body": "海外资产本身上涨，不代表人民币投资者一定获得同样涨幅；资产价格与汇率会共同作用。"},
+        {"title": "渠道可能处理不同", "body": "QDII 净值、港股通结算和银行换汇采用的时间与价格并不相同，需要以产品文件与交易平台为准。"},
+    ],
+    "global-risk": [
+        {"title": "利率和估值", "body": "长期利率上升会提高股票和 REITs 的折现率，对高估值成长资产的影响通常更明显；利率下降时反之。"},
+        {"title": "能源和通胀", "body": "油价变化会传导到运输、制造与生活成本，进而影响通胀和降息预期，也会影响进口能源国家的汇率。"},
+        {"title": "风险变量不是方向预测", "body": "利率和油价描述的是风险环境，不能单独用来判断明天股市涨跌。"},
     ],
 }
 
@@ -273,7 +293,7 @@ def describe_move(change_text):
     if pct is None:
         return ""
     if abs(pct) < 0.005:
-        return "基本持平"
+        return "与前一交易日持平"
     return f"{'上涨' if pct > 0 else '下跌'} {abs(pct):.2f}%"
 
 
@@ -287,54 +307,59 @@ def metric_change(market, label):
     return metric.get("change", "") if metric else ""
 
 
+def index_sentence(market, label, name=None):
+    name = name or label
+    return f"{name}{' ' if name[-1].isascii() else ''}报 {metric_value(market, label)} 点，{describe_move(metric_change(market, label))}"
+
+
+def oil_sentence(market, label):
+    metric = find_metric(market, label)
+    if not metric:
+        return ""
+    if "%" in metric.get("change", ""):  # 新浪期货：时间写在卡片备注里，摘要不重复
+        return f"{label}期货报 {metric['value']}，较前一日结算价{describe_move(metric['change'])}"
+    return f"{label}现货报 {metric['value']}（{metric.get('note', '').split('，')[0]}）"
+
+
 def refresh_summaries(markets):
+    for market_id, signals in EVERGREEN_SIGNALS.items():
+        markets[market_id]["signals"] = [dict(signal) for signal in signals]
+
     a_share = markets["a-share"]
-    date = a_share["headline"]["asOf"].split(" ")[0]
-    pcts = [parse_num(metric_change(a_share, label)) or 0 for label in ("沪深 300", "上证指数", "深证成指")]
-    mixed = max(pcts) > 0 > min(pcts)
     a_share["summary"] = (
-        f"最近交易日（{date}）沪深 300 收于 {metric_value(a_share, '沪深 300')}，{describe_move(metric_change(a_share, '沪深 300'))}；"
-        f"上证指数{describe_move(metric_change(a_share, '上证指数'))}，深证成指{describe_move(metric_change(a_share, '深证成指'))}，"
-        f"沪深两市成交额约 {metric_value(a_share, '沪深成交额')}。"
-        + ("几个主要指数涨跌不一，说明市场内部有分化。" if mixed else "")
-        + "单日涨跌属于正常波动，不应据此改变长期配置比例。"
+        f"最近交易日（{a_share['headline']['asOf'].split(' ')[0]}）收盘："
+        f"{index_sentence(a_share, '沪深 300')}；{index_sentence(a_share, '上证指数')}；{index_sentence(a_share, '深证成指')}。"
+        f"沪深两市成交额 {metric_value(a_share, '沪深成交额')}"
+        + (f"，{metric_change(a_share, '沪深成交额')}。" if metric_change(a_share, "沪深成交额").startswith("较") else "。")
     )
-    a_share["signals"] = EVERGREEN_SIGNALS["a-share"]
 
     hk = markets["hong-kong"]
-    date = hk["headline"]["asOf"].split(" ")[0]
-    gap = abs((parse_num(metric_change(hk, "恒生科技")) or 0) - (parse_num(metric_change(hk, "恒生指数")) or 0))
     hk["summary"] = (
-        f"最近交易日（{date}）恒生指数{describe_move(metric_change(hk, '恒生指数'))}，"
-        f"国企指数{describe_move(metric_change(hk, '国企指数'))}，恒生科技指数{describe_move(metric_change(hk, '恒生科技'))}。"
-        + ("科技指数和恒指的涨跌幅差距较大，成长类公司对利率和情绪更敏感。" if gap >= 1 else "科技指数与恒指走势接近。")
-        + "港股同时受内地基本面和海外利率影响，单日变化不宜过度解读。"
+        f"最近交易日（{hk['headline']['asOf'].split(' ')[0]}）收盘："
+        f"{index_sentence(hk, '恒生指数')}；{index_sentence(hk, '国企指数')}；{index_sentence(hk, '恒生科技', '恒生科技指数')}。"
+        f"全日成交额 {metric_value(hk, '全日成交额')}"
+        + (f"，{metric_change(hk, '全日成交额')}。" if metric_change(hk, "全日成交额").startswith("较") else "。")
     )
-    hk["signals"] = EVERGREEN_SIGNALS["hong-kong"]
 
     fx = markets["fx"]
     today, previous = parse_num(metric_value(fx, "今日中间价")), parse_num(metric_value(fx, "前一日中间价"))
     if today and previous:
         bp = round((today - previous) * 10000)
-        move = "与前一日持平" if bp == 0 else f"较前一日人民币{'贬值' if bp > 0 else '升值'} {abs(bp)} 基点"
+        move = ("与前一日持平" if bp == 0 else
+                f"较前一日 {previous:.4f} {'上调' if bp > 0 else '下调'} {abs(bp)} 基点，即人民币{'贬值' if bp > 0 else '升值'}")
         fx["summary"] = (
             f"{fx['headline']['asOf'].split(' ')[0]} 人民币兑美元中间价为 {today:.4f}，{move}。"
-            "人民币走强会压低未对冲美元资产折算成人民币后的收益；人民币走弱时则可能放大人民币计价收益。"
+            f"100 港元的人民币中间价为 {metric_value(fx, '100 港元')}。"
         )
 
     risk = markets["global-risk"]
-    ust = parse_num(metric_value(risk, "美国 10 年期收益率"))
-    brent = parse_num(metric_value(risk, "Brent 原油"))
-    if ust and brent:
-        rate_view = ("长端利率处在偏高位置，会压缩高估值资产的估值空间" if ust >= 4.5
-                     else "长端利率处在偏低位置，对高估值资产的压力相对较小" if ust < 3 else "长端利率处在中等位置")
-        oil_view = ("油价偏高，可能推升通胀与企业成本" if brent >= 90
-                    else "油价偏低，通胀压力相对缓和" if brent < 60 else "油价处在中等区间")
-        risk["summary"] = (
-            f"美国 10 年期国债收益率最新为 {ust:.2f}%（{risk['headline']['asOf']}），"
-            f"Brent 原油约 {metric_value(risk, 'Brent 原油')}、WTI 约 {metric_value(risk, 'WTI 原油')}（油价为国际原油期货近月合约或现货的最近可得价格）。"
-            f"{rate_view}；{oil_view}。这些是对风险环境的观察，不是涨跌预测。"
-        )
+    ust = find_metric(risk, "美国 10 年期收益率")
+    parts = []
+    if ust:
+        parts.append(f"美国 10 年期国债收益率为 {ust['value']}（{risk['headline']['asOf']}）")
+    parts += [sentence for sentence in (oil_sentence(risk, "Brent 原油"), oil_sentence(risk, "WTI 原油")) if sentence]
+    if parts:
+        risk["summary"] = "；".join(parts) + "。"
 
 
 # ---------------------------------------------------------------- 主流程
@@ -367,12 +392,19 @@ def main():
             if total > 0:
                 metric = find_metric(a_share, "沪深成交额")
                 if metric:
-                    metric.update({"value": f"{total:.3f} 万亿元", "change": "当日口径", "tone": "flat"})
+                    metric.update(turnover_update(metric, total * 1e4, f"{total:.3f} 万亿元", "元", "沪市与深市合计"))
                     changed.append("沪深成交额")
         for key, label in (("hstech", "恒生科技"), ("hsi", "恒生指数"), ("hscei", "国企指数")):
             q = quotes.get(key)
             if q and set_metric(hk, label, fmt_num(q["value"]), fmt_pct(q["pct"]), tone(q["pct"]), "index", q["value"]):
                 changed.append(label)
+        hk_changed = any(label in changed for label in ("恒生科技", "恒生指数", "国企指数"))
+        if hk_changed and quotes.get("hsi", {}).get("amount"):
+            amount = quotes["hsi"]["amount"] / 1e8
+            metric = find_metric(hk, "全日成交额")
+            if metric:
+                metric.update(turnover_update(metric, amount, f"{amount:,.2f} 亿港元", "港元", "不同数据商统计口径可能有差异"))
+                changed.append("港股成交额")
         if "恒生科技" in changed:
             q = quotes["hstech"]
             set_headline(hk, fmt_num(q["value"]), fmt_pct(q["pct"]), tone(q["pct"]), stamp("hstech"))
@@ -429,7 +461,7 @@ def main():
             if code in sina_oil:
                 oil = sina_oil[code]
                 ok = set_metric(market, label, f"${oil['value']:.2f} / 桶", fmt_pct(oil["pct"]), "risk", "oil", oil["value"],
-                                note=f"国际期货近月合约，{oil['date']} {oil['time']}（北京时间）")
+                                note=f"国际期货近月合约，北京时间 {oil['date']} {oil['time']}")
             else:
                 oil = fetch_fred(series)
                 log(f"[{series}] {oil}")

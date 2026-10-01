@@ -136,19 +136,36 @@
       const response = await fetch('data/news.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('news unavailable');
       const data = await response.json();
-      $('#news-status').textContent = `${data.updatedAt} 更新`;
+      const monthDay = (date) => {
+        const [, month, day] = String(date).split('-');
+        return `${Number(month)} 月 ${Number(day)} 日`;
+      };
+      // 新闻超过 3 天没更新（免费模式下不会自动更新）时，不再称为“今天”，并写明消息日期
+      const beijingToday = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+      const ageDays = (Date.parse(beijingToday) - Date.parse(String(data.updatedAt).slice(0, 10))) / 86400000;
+      const stale = Number.isFinite(ageDays) && ageDays > 3;
+      const dates = data.items.map((item) => item.date).filter(Boolean).sort();
+      const dateRange = dates.length && dates[0] !== dates[dates.length - 1]
+        ? `${monthDay(dates[0])}—${monthDay(dates[dates.length - 1])}`
+        : monthDay(dates[0] || data.updatedAt);
+      $('#news-status').textContent = stale ? `消息日期：${dateRange}` : `${data.updatedAt} 更新`;
+      const setText = (selector, text) => { const node = $(selector); if (node) node.textContent = text; };
+      if (stale) {
+        setText('#news-heading', '最近观察');
+        setText('#news-eyebrow', '近期观察');
+        setText('#news-fold-title', '近期市场观察');
+      }
       const thesis = $('#current-regime');
-      thesis.replaceChildren(makeElement('strong', '', '今日主线：'), document.createTextNode(data.thesis));
+      thesis.replaceChildren(makeElement('strong', '', stale ? '近期主线：' : '今日主线：'), document.createTextNode(data.thesis));
       const hint = $('#news-fold-hint');
-      if (hint) hint.textContent = `${data.items.length} 条消息，以及怎么判断它们和你有没有关系`;
+      if (hint) hint.textContent = stale
+        ? `${dateRange}的 ${data.items.length} 条消息，以及怎么判断它们和你有没有关系`
+        : `${data.items.length} 条消息，以及怎么判断它们和你有没有关系`;
       listNode.replaceChildren();
       data.items.forEach((item) => {
         const article = makeElement('article', 'news-item');
         const meta = makeElement('div');
-        const time = makeElement('time', '', (() => {
-          const [, month, day] = item.date.split('-');
-          return `${Number(month)} 月 ${Number(day)} 日`;
-        })());
+        const time = makeElement('time', '', monthDay(item.date));
         time.setAttribute('datetime', item.date);
         meta.append(makeElement('span', 'source-chip', `${item.category} · ${item.source}`), time);
         article.append(meta, makeElement('strong', '', item.title), makeElement('p', '', item.summary));
@@ -162,7 +179,7 @@
         listNode.appendChild(article);
       });
     } catch (_) {
-      listNode.replaceChildren(makeElement('p', 'loading-copy', '今日消息暂时无法载入，请稍后刷新。'));
+      listNode.replaceChildren(makeElement('p', 'loading-copy', '消息暂时无法载入，请稍后刷新。'));
     }
   }
 
