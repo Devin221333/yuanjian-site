@@ -27,7 +27,9 @@
    - A 股 / 港股指数改为腾讯行情 qt.gtimg.cn 为主、东方财富为备用（东方财富 push2 从海外网络测试时持续 502，GitHub Actions 也在海外，需在首次运行时确认）。
    - 美国财政部收益率 CSV、外汇交易中心 ccpr.json（字段 vrtEName / price 已确认）正常；油价见第 3 条。
    - 收盘日期取自行情返回的时间，不再用运行当天；数值没变的项不算更新，休市日不会产生空提交。
-   - 免费模式：update_market.py 会按当天数字用模板重写各市场 summary，并使用长期适用的 signals，不调用 API。
+   - 免费模式：update_market.py 按当天数字用模板重写各市场 summary（只写点位、涨跌幅、成交额、汇率变化等客观事实，不做判断和预测），
+     signals 固定为 refresh_summaries 里的通用阅读提示；update_commentary.py 运行成功时会覆盖这两项。
+   - 首页：news.json 的 updatedAt 距今超过 3 天，标题自动改为「最近观察」「近期主线」并显示消息日期范围（app.js loadNews）。
 2. （可选，会产生 API 费用，目前不启用）设置 `ANTHROPIC_API_KEY` 后运行 `python scripts/update_commentary.py --check`，检查生成的新闻和解读质量、链接真实性。
 3. ✅ 2026-10-01 已上线：仓库 https://github.com/Devin221333/yuanjian-site （公开），工作流已手动跑通并自动提交数据。
    未添加 `ANTHROPIC_API_KEY`（用户暂不付费），文字解读一步自动跳过。
