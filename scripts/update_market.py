@@ -651,8 +651,8 @@ def market_observations(markets, history):
     context.append(ust_text)
 
     # 组合页“今天的行情会改变这个比例吗？”：数据句子 + 供页面对比用的近 20 日涨跌幅（理由部分由 app.js 结合用户答案生成）
-    note = {"text": "；".join(context) + "。", "csi300Change20d": csi_month_pct}
-    return result, note
+    # marketContext 保持纯文字（旧版页面缓存也能正常显示），数字单独放在 marketContextCsi300Change20d
+    return result, ("；".join(context) + "。", csi_month_pct)
 
 
 # ---------------------------------------------------------------- 主流程
@@ -770,7 +770,7 @@ def main():
     if not changed:
         log("没有任何数据更新（可能是休市日或数据源全部失败），不写文件。")
         return 0
-    data["marketContext"] = refresh_summaries(markets, fetch_history())
+    data["marketContext"], data["marketContextCsi300Change20d"] = refresh_summaries(markets, fetch_history())
     data.pop("commentaryUpdatedAt", None)  # 文字已是按今天数字生成的模板，旧的“解读更新于”日期不再适用
     data["updatedAt"] = f"{now:%Y-%m-%d %H:%M}"
     data["timezone"] = "北京时间"

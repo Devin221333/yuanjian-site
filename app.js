@@ -1610,11 +1610,12 @@
       const fx = byId.fx.headline;
       const globalRisk = byId['global-risk'].headline;
       // marketContext 由 update_market.py 按当天数据生成；没有时只列数字
-      const context = typeof data.marketContext === 'object' && data.marketContext ? data.marketContext : {};
-      const text = context.text || `沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。`;
+      const context = data.marketContext;
+      const text = (typeof context === 'string' ? context : context && context.text) || `沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。`;
+      const rawMove = data.marketContextCsi300Change20d ?? (context && context.csi300Change20d);
       $('#market-context-time').textContent = `${data.updatedAt} · ${data.timezone}`;
       $('#market-rationale').replaceChildren(makeElement('strong', '', '当前公开数据：'), document.createTextNode(text));
-      renderReasons(Number.isFinite(context.csi300Change20d) ? context.csi300Change20d : NaN);
+      renderReasons(rawMove == null ? NaN : Number(rawMove));
     } catch (_) {
       $('#market-context-time').textContent = '数据暂不可用';
       $('#market-rationale').replaceChildren(makeElement('strong', '', '市场数据暂未载入：'), document.createTextNode('不影响下面的判断。'));

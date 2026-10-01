@@ -31,7 +31,8 @@
      signals 是按数据判断得出的 3 条观察（market_observations：连续涨跌、近 20 个交易日累计变化、近一年位置、成交额变化、
      指数是否同向），数据不足时用 EVERGREEN_SIGNALS 通用阅读提示补足；update_commentary.py 运行成功时会覆盖 summary 和 signals。
    - 历史数据每次运行时现取（腾讯日线、外汇交易中心 CcprHisNew 分页且范围须小于一年、美国财政部 CSV、新浪原油日线），不另存文件。
-   - market-details.json 顶层新增 `marketContext`：{text: 当天数据句子, csi300Change20d: 沪深 300 近 20 日涨跌幅}，由 update_market.py 生成，
+   - market-details.json 顶层新增 `marketContext`（当天数据句子，纯文字）和 `marketContextCsi300Change20d`（沪深 300 近 20 日涨跌幅），
+     由 update_market.py 生成。marketContext 必须保持字符串：浏览器可能缓存旧版 app.js，改成对象会显示 [object Object]。
      API 不覆盖。组合页“今天的行情会改变这个比例吗？”由 app.js renderMarketContext 结合用户答案（期限、应急金、可承受跌幅、
      画像的压力情景和复核规则）列出三条“为什么不会”的理由；缺失时只列数字。
    - 首页：news.json 的 updatedAt 距今超过 3 天，标题自动改为「最近观察」「近期主线」并显示消息日期范围（app.js loadNews）。
