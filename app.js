@@ -1570,57 +1570,171 @@
     }
   }
 
-  async function renderMarketContext(result) {
-    if (!$('#market-context-time') || !$('#market-rationale')) return;
+  // 组合页“最近一个交易日，你的组合大约涨跌多少”：用境内 ETF 收盘涨跌（data/daily-moves.json）估算。
+  // 中国权益 = 70% 沪深300ETF + 30% 恒生ETF（与历史验证页口径一致），现金按 0% 计。
+  const DAILY_IMPACT_MAP = {
+    cash: {},
+    bonds: { 511010: 1 },
+    china: { 510300: 0.7, 159920: 0.3 },
+    global: { 513500: 1 },
+    reits: { 160140: 1 },
+    gold: { 518880: 1 }
+  };
+  const signedPct = (value, digits = 1) => {
+    const rounded = Number(value.toFixed(digits));
+    if (rounded === 0) return `${(0).toFixed(digits)}%`;
+    return `${rounded > 0 ? '+' : '-'}${Math.abs(rounded).toFixed(digits)}%`;
+  };
+  const toneOf = (value, digits = 1) => {
+    const rounded = Number(value.toFixed(digits));
+    return rounded > 0 ? 'up' : rounded < 0 ? 'down' : 'flat';
+  };
+  const moveWords = (value) => (Math.abs(value) < 0.05 ? '基本持平' : `${value > 0 ? '涨了' : '跌了'} ${Math.abs(value).toFixed(1)}%`);
+
+  function dailyImpactVerdict(csi, total) {
+    const diff = total - csi; // 正数 = 组合比只买沪深 300 表现好
+    const gap = Math.abs(diff).toFixed(1);
+    const both = `沪深 300 ${moveWords(csi)}，你的组合约${moveWords(total)}`;
+    if (Math.abs(csi) < 0.5 && Math.abs(total) < 0.3) return `今天市场比较平静：${both}，变化都很小。`;
+    if (csi <= -1) {
+      return diff > 0.05
+        ? `${both}——分散帮你少跌了约 ${gap} 个百分点。`
+        : `${both}，比只买沪深 300 还多跌了约 ${gap} 个百分点。分散不保证每天都跌得更少，它减少的是长期的大起大落。`;
+    }
+    if (csi >= 1) {
+      return diff < -0.05
+        ? `${both}。分散也意味着涨的时候少赚一些（约 ${gap} 个百分点），这是平稳的代价。`
+        : `${both}，今天其他资产涨得更多。分散不保证每天都更好，它减少的是长期的大起大落。`;
+    }
+    if (Math.abs(diff) < 0.1) return `${both}，两者差别不大。`;
+    if (csi < 0) {
+      return diff > 0
+        ? `${both}，分散帮你少跌了约 ${gap} 个百分点。`
+        : `${both}，其他资产跌得更多，比只买沪深 300 多跌了约 ${gap} 个百分点。分散不保证每天都更好。`;
+    }
+    return diff < 0
+      ? `${both}。分散也意味着涨的时候少赚一些（约 ${gap} 个百分点），这是平稳的代价。`
+      : `${both}，其他资产涨得更多，比只买沪深 300 多涨了约 ${gap} 个百分点。`;
+  }
+
+  async function renderDailyImpact(result) {
+    const card = $('#daily-impact');
+    if (!card) return;
+    renderImpactReasons(result);
+    try {
+      const response = await fetch('data/daily-moves.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('daily moves unavailable');
+      const moves = await response.json();
+      const pct = Object.fromEntries(moves.etfs.map((etf) => [String(etf.code), Number(etf.changePct)]));
+      const assetMove = (bucketId) => Object.entries(DAILY_IMPACT_MAP[bucketId] || {}).reduce((sum, [code, share]) => {
+        if (!Number.isFinite(pct[code])) throw new Error(`missing ${code}`);
+        return sum + share * pct[code];
+      }, 0);
+      const rows = modelData.buckets.map((bucket) => {
+        const weight = result.weights[bucket.id] || 0;
+        const move = assetMove(bucket.id);
+        return { bucket, weight, move, contribution: (weight / 100) * move };
+      });
+      const total = rows.reduce((sum, row) => sum + row.contribution, 0);
+      const csi = pct['510300'];
+
+      const [, month, day] = moves.date.split('-');
+      $('#impact-date').textContent = `${Number(month)} 月 ${Number(day)} 日收盘`;
+      $('#impact-date').setAttribute('datetime', moves.date);
+      const totalNode = $('#impact-total');
+      totalNode.textContent = signedPct(total);
+      totalNode.className = toneOf(total);
+
+      const maxBar = Math.max(Math.abs(csi), Math.abs(total), 0.1);
+      $('#impact-compare').replaceChildren(...[['只买沪深 300', csi], ['你的组合', total]].map(([label, value]) => {
+        const row = makeElement('div', `compare-row ${toneOf(value)}`);
+        const barTrack = makeElement('div', 'compare-track');
+        const bar = makeElement('span', 'compare-bar');
+        bar.style.width = `${Math.max(2, (Math.abs(value) / maxBar) * 100)}%`;
+        barTrack.appendChild(bar);
+        row.append(makeElement('span', 'compare-label', label), barTrack, makeElement('b', '', signedPct(value)));
+        return row;
+      }));
+      $('#impact-verdict').textContent = dailyImpactVerdict(csi, total);
+
+      const maxContribution = Math.max(...rows.map((row) => Math.abs(row.contribution)), 0.01);
+      $('#contrib-list').replaceChildren(...rows.map(({ bucket, weight, move, contribution }) => {
+        const tone = toneOf(contribution, 2);
+        const row = makeElement('div', `contrib-row ${tone}`);
+        const name = makeElement('div', 'contrib-name');
+        name.append(makeElement('strong', '', bucket.shortName), makeElement('small', '', bucket.id === 'cash'
+          ? `占 ${weight}% · 按 0% 计`
+          : `占 ${weight}% · 本身 ${signedPct(move, 2)}`));
+        const barTrack = makeElement('div', 'contrib-track');
+        const bar = makeElement('span', 'contrib-bar');
+        bar.style.width = `${(Math.abs(contribution) / maxContribution) * 50}%`;
+        barTrack.appendChild(bar);
+        const tag = tone === 'flat' ? '几乎没影响' : contribution < 0 ? '拖累' : total < 0 ? '托底' : '拉高';
+        const value = makeElement('div', 'contrib-value');
+        value.append(makeElement('b', '', tone === 'flat' ? '0.00' : `${contribution > 0 ? '+' : '-'}${Math.abs(contribution).toFixed(2)}`), makeElement('small', '', tag));
+        row.append(name, barTrack, value);
+        return row;
+      }));
+
+      // 手机端贡献明细默认收起，电脑端始终展开
+      const details = $('#impact-contrib');
+      const mobile = window.matchMedia('(max-width: 900px)');
+      const syncOpen = () => { details.open = !mobile.matches; };
+      syncOpen();
+      mobile.addEventListener('change', syncOpen);
+      details.querySelector('summary').addEventListener('click', (event) => { if (!mobile.matches) event.preventDefault(); });
+
+      card.hidden = false;
+      const report = () => track('组合', '查看当日影响', result.profile.name);
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) { observer.disconnect(); report(); }
+        }, { threshold: 0.4 });
+        observer.observe(card);
+      } else {
+        report();
+      }
+    } catch (_) {
+      card.hidden = true;
+    }
+  }
+
+  async function renderImpactReasons(result) {
+    const list = $('#market-reasons');
+    if (!list) return;
     const { answers, profile } = result;
     const horizonText = textMaps.horizon[answers.horizon] || '';
     const emergencyText = { under3: '不到 3 个月', threeToSix: '3–6 个月', sixToTwelve: '6–12 个月', overTwelve: '12 个月以上' }[answers.emergency] || '';
     const drawdownText = { five: '约 5%', ten: '约 10%', twenty: '约 20%', thirty: '约 30%', forty: '40% 以上' }[answers.drawdown] || '';
-    // 压力情景形如“约 -18% 至 -28%”，取较小的那个跌幅做对比
-    const stressFloor = Math.min(...(String(profile.stress).match(/\d+(\.\d+)?/g) || ['0']).map(Number));
-    const reasons = (move) => {
-      let volatility = `设计“${profile.name}”时，已经预期整个组合在不利的年份可能出现${profile.stress}的波动，短期涨跌本来就在计划之内。`;
-      if (Number.isFinite(move)) {
-        const moveText = `沪深 300 近 20 个交易日${move >= 0 ? '上涨' : '下跌'} ${Math.abs(move).toFixed(2)}%`;
-        volatility += Math.abs(move) < stressFloor
-          ? `${moveText}，这是单个市场一个月的变化，幅度小于这个预期。`
-          : `${moveText}，幅度已经不小，可以按第 3 条检查自己的持仓是否偏离目标。`;
-      }
-      return [
-        ['比例由你的情况决定', `你的比例取决于投资期限（${horizonText}）、应急金（${emergencyText}）和能承受的一年最大跌幅（${drawdownText}）。上面的行情数字没有改变其中任何一项。`],
-        ['这类波动已经算进去了', volatility],
-        ['什么时候才需要调整', `${profile.review}。要不要调整，看的是你自己的持仓比例，而不是某个指数的涨跌；只有期限、用钱计划或应急金变了，才需要重新回答问题。`]
-      ];
-    };
-    const renderReasons = (move) => {
-      const list = $('#market-reasons');
-      if (!list) return;
-      list.replaceChildren(...reasons(move).map(([title, body]) => {
-        const item = makeElement('li');
-        item.append(makeElement('strong', '', title), makeElement('span', '', body));
-        return item;
-      }));
-    };
+    let move = NaN;
     try {
-      const response = await fetch('data/market-details.json', { cache: 'no-store' });
-      if (!response.ok) throw new Error('market data unavailable');
-      const data = await response.json();
-      const byId = Object.fromEntries(data.markets.map((market) => [market.id, market]));
-      const aShare = byId['a-share'].headline;
-      const fx = byId.fx.headline;
-      const globalRisk = byId['global-risk'].headline;
-      // marketContext 由 update_market.py 按当天数据生成；没有时只列数字
-      const context = data.marketContext;
-      const text = (typeof context === 'string' ? context : context && context.text) || `沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。`;
-      const rawMove = data.marketContextCsi300Change20d ?? (context && context.csi300Change20d);
-      $('#market-context-time').textContent = `${data.updatedAt} · ${data.timezone}`;
-      $('#market-rationale').replaceChildren(makeElement('strong', '', '当前公开数据：'), document.createTextNode(text));
-      renderReasons(rawMove == null ? NaN : Number(rawMove));
-    } catch (_) {
-      $('#market-context-time').textContent = '数据暂不可用';
-      $('#market-rationale').replaceChildren(makeElement('strong', '', '市场数据暂未载入：'), document.createTextNode('不影响下面的判断。'));
-      renderReasons(NaN);
+      const data = await getMarketData();
+      const raw = data.marketContextCsi300Change20d;
+      if (raw != null) move = Number(raw);
+    } catch (_) { /* 没有市场数据时只写通用理由 */ }
+    // 压力区间形如“约 -18% 至 -28%”：较小跌幅为下沿，较大跌幅为上沿
+    const bounds = (String(profile.stress).match(/\d+(\.\d+)?/g) || []).map(Number);
+    const lower = bounds.length ? Math.min(...bounds) : NaN;
+    const upper = bounds.length ? Math.max(...bounds) : NaN;
+    let stressNote = `“${profile.name}”预期不利年份可能出现${profile.stress}的波动。`;
+    if (Number.isFinite(move) && Number.isFinite(lower)) {
+      const recent = `单看沪深 300，近 20 个交易日${move >= 0 ? '上涨' : '下跌'} ${Math.abs(move).toFixed(1)}%`;
+      if (move >= 0) stressNote += `${recent}；上涨同样不改变长期比例，涨多的部分在复核时按规则调回。`;
+      else if (-move < lower) stressNote += `${recent}，小于这个幅度。`;
+      else if (-move <= upper) stressNote += `${recent}，已进入这个区间，仍在预期之内；可以按第 3 条检查持仓。`;
+      else stressNote += `${recent}，已超过这个区间。压力区间不是最大可能损失，这时更要按第 3 条检查持仓，并确认期限和用钱计划没有变。`;
     }
+    const reasons = [
+      ['比例看你的情况', `期限 ${horizonText}、应急金 ${emergencyText}、能承受一年跌${drawdownText}。一天或一个月的行情不会改变这些。`],
+      ['波动已算在内', stressNote],
+      ['什么时候才动', `${profile.review}；看的是你的持仓比例，不是某个指数。期限、用钱计划或应急金变了，再重新回答问题。`]
+    ];
+    list.replaceChildren(...reasons.map(([title, body]) => {
+      const item = makeElement('li');
+      item.append(makeElement('strong', '', title), makeElement('span', '', body));
+      return item;
+    }));
+    $('#impact-why').hidden = false;
   }
 
   function renderProfilePreview(result) {
@@ -1817,7 +1931,7 @@
         renderAllocation(result);
         track('组合', '查看', result.profile.name);
         renderBacktestNote(result);
-        renderMarketContext(result);
+        renderDailyImpact(result);
       }
       if (allocationPage === 'review') {
         if (!hasCompletedQuiz()) {

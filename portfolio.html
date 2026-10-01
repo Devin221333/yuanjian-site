@@ -6,8 +6,8 @@
   <meta name="description" content="根据投资期限、风险画像和可用渠道生成面向中国个人投资者的多资产配置草案。" />
   <title>远见配置｜第二步：你的组合</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23183b63'/%3E%3Cpath d='M14 42 26 29l9 8 15-18' fill='none' stroke='%23c9a85a' stroke-width='5'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="style.css?v=27" />
-  <link rel="stylesheet" href="daily.css?v=27" />
+  <link rel="stylesheet" href="style.css?v=28" />
+  <link rel="stylesheet" href="daily.css?v=28" />
 </head>
 <body data-allocation-page="portfolio">
   <header class="site-header"><div class="shell nav-wrap">
@@ -63,10 +63,25 @@
         <ul id="why-list" class="why-list"></ul>
       </details>
 
-      <details class="portfolio-fold">
-        <summary><strong>今天的行情会改变这个比例吗？</strong><span>不会，原因在这里</span></summary>
-        <div class="market-context-card"><div class="context-head"><time id="market-context-time">载入中</time></div><p class="market-rationale" id="market-rationale"><strong>正在读取市场环境：</strong>短期行情不会自动改写长期比例。</p><ol class="context-reasons" id="market-reasons" aria-label="为什么不会改变比例"></ol><a class="text-link" href="index.html#daily-observation">查看市场观察</a></div>
-      </details>
+      <section class="daily-impact" id="daily-impact" hidden aria-labelledby="daily-impact-title">
+        <div class="impact-head"><h3 id="daily-impact-title">最近一个交易日，你的组合大约涨跌多少</h3><time id="impact-date"></time></div>
+        <div class="impact-body">
+          <div class="impact-main">
+            <p class="impact-big">你的组合约 <strong id="impact-total">—</strong></p>
+            <div class="impact-compare" id="impact-compare"></div>
+            <p class="impact-verdict" id="impact-verdict"></p>
+          </div>
+          <details class="impact-contrib" id="impact-contrib">
+            <summary><strong>各类资产贡献了多少</strong><span class="impact-toggle">展开看六类资产各自贡献了多少</span><small>红色拉高组合，绿色拉低组合</small></summary>
+            <div class="contrib-list" id="contrib-list"></div>
+          </details>
+        </div>
+        <p class="impact-footnote">按境内 ETF 收盘涨跌估算，与你的实际持仓、QDII 溢价和费用会有差异，仅用于理解分散的作用。</p>
+      </section>
+      <section class="impact-why" id="impact-why" hidden>
+        <h4>为什么不用因此调整比例</h4>
+        <ol class="context-reasons" id="market-reasons"></ol>
+      </section>
     </section>
 
     <div class="wizard-bottom-actions"><a class="wizard-back" href="recommendation.html">修改答案</a><a class="primary-button" href="review.html">下一步：复核规则</a></div>
@@ -74,6 +89,6 @@
   </main>
 
   <footer><div class="shell"><span>远见配置 · 中国投资者的全球资产配置</span><span><a href="privacy.html">隐私说明</a> · 为独立思考而设计</span></div></footer>
-  <script src="app.js?v=27"></script>
+  <script src="app.js?v=28"></script>
 </body>
 </html>

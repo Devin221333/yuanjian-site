@@ -3296,3 +3296,79 @@ footer a { color: inherit; text-decoration: underline; text-underline-offset: 3p
   .context-reasons li { padding: 12px 12px 12px 40px; }
   .context-reasons li::before { top: 12px; left: 12px; }
 }
+
+/* v28：组合页“最近一个交易日，你的组合大约涨跌多少”（替代原“今天的行情会改变这个比例吗？”折叠栏）
+   红涨绿跌。电脑端：左边大数字 + 对比条，右边贡献条形图并排。手机端：大数字和对比条在上，贡献明细默认收起。 */
+.daily-impact {
+  --impact-up: #c0392b;
+  --impact-down: #1e8a5a;
+  --impact-flat: #8a9aa8;
+  margin-top: 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+.impact-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.impact-head h3 { margin: 0; font-size: 1.02rem; color: var(--ink); }
+.impact-head time { color: #728594; font-size: .75rem; white-space: nowrap; }
+.impact-body {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+  gap: 28px;
+  margin-top: 16px;
+}
+.impact-big { margin: 0; color: #4f687b; font-size: .95rem; }
+.impact-big strong { margin-left: 4px; font-family: Georgia, "Songti SC", serif; font-size: 2.6rem; line-height: 1; letter-spacing: -.02em; }
+.impact-big strong.up, .compare-row.up b, .contrib-row.up .contrib-value b { color: var(--impact-up); }
+.impact-big strong.down, .compare-row.down b, .contrib-row.down .contrib-value b { color: var(--impact-down); }
+.impact-big strong.flat, .compare-row.flat b, .contrib-row.flat .contrib-value b { color: var(--impact-flat); }
+
+.impact-compare { display: grid; gap: 10px; margin-top: 18px; }
+.compare-row { display: grid; grid-template-columns: 6.5em minmax(0, 1fr) 4.2em; align-items: center; gap: 10px; }
+.compare-label { color: #4f687b; font-size: .82rem; }
+.compare-track { height: 12px; border-radius: 6px; background: #eef3f6; overflow: hidden; }
+.compare-bar { display: block; height: 100%; border-radius: 6px; background: var(--impact-flat); }
+.compare-row.up .compare-bar { background: var(--impact-up); }
+.compare-row.down .compare-bar { background: var(--impact-down); }
+.compare-row b { text-align: right; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.impact-verdict { margin: 16px 0 0; padding: 12px 14px; border-radius: 9px; background: #f4f9fa; color: #33495d; font-size: .86rem; line-height: 1.7; }
+
+.impact-contrib > summary { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 10px; list-style: none; cursor: default; }
+.impact-contrib > summary::-webkit-details-marker { display: none; }
+.impact-contrib > summary strong { color: var(--ink); font-size: .92rem; }
+.impact-contrib > summary small { color: #7b8c9b; font-size: .74rem; }
+.impact-toggle { display: none; }
+.contrib-list { display: grid; gap: 8px; margin-top: 12px; }
+.contrib-row { display: grid; grid-template-columns: 7.2em minmax(0, 1fr) 4.4em; align-items: center; gap: 10px; }
+.contrib-name strong { display: block; color: var(--ink); font-size: .84rem; }
+.contrib-name small { display: block; color: #7b8c9b; font-size: .7rem; white-space: nowrap; }
+.contrib-track { position: relative; height: 12px; background: #f3f6f8; border-radius: 3px; }
+.contrib-track::before { content: ""; position: absolute; top: -3px; bottom: -3px; left: 50%; width: 1px; background: #b9c7d2; }
+.contrib-bar { position: absolute; top: 0; bottom: 0; border-radius: 3px; background: var(--impact-flat); }
+.contrib-row.up .contrib-bar { left: 50%; background: var(--impact-up); }
+.contrib-row.down .contrib-bar { right: 50%; background: var(--impact-down); }
+.contrib-row.flat .contrib-bar { left: 50%; }
+.contrib-value { text-align: right; }
+.contrib-value b { display: block; font-size: .86rem; font-variant-numeric: tabular-nums; }
+.contrib-value small { display: block; color: #7b8c9b; font-size: .68rem; }
+.impact-footnote { margin: 16px 0 0; color: #8193a3; font-size: .72rem; }
+
+.impact-why { margin-top: 12px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: #fbfdfe; }
+.impact-why h4 { margin: 0 0 12px; color: var(--ink); font-size: .92rem; }
+.impact-why .context-reasons { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .daily-impact { padding: 16px; }
+  .impact-body { grid-template-columns: 1fr; gap: 14px; }
+  .impact-big strong { font-size: 2.2rem; }
+  .impact-contrib { border-top: 1px solid var(--line); padding-top: 12px; }
+  .impact-contrib > summary { cursor: pointer; justify-content: space-between; }
+  .impact-contrib > summary strong, .impact-contrib > summary small { display: none; }
+  .impact-contrib[open] > summary strong, .impact-contrib[open] > summary small { display: inline; }
+  .impact-toggle { display: inline; color: var(--blue); font-size: .84rem; font-weight: 700; }
+  .impact-toggle::after { content: " ▾"; }
+  .impact-contrib[open] .impact-toggle { display: none; }
+  .contrib-row { grid-template-columns: 6.4em minmax(0, 1fr) 4em; gap: 8px; }
+  .impact-why { padding: 14px; }
+}

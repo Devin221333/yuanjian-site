@@ -19,6 +19,8 @@
     （东方财富在海外机房（含 GitHub Actions）经常返回 502）。
   * 美债 10 年：美国财政部收益率 CSV，失败回退 FRED DGS10。
   * 人民币中间价：中国外汇交易中心 ccpr.json（字段 vrtEName / price）。
+  * 组合页当日涨跌估算：6 只境内 ETF（腾讯行情），写入 data/daily-moves.json。
+    用境内 ETF 而不是海外指数：它们和 A 股同一时间收盘、都用人民币计价，已包含汇率影响。
   * 原油：新浪财经国际期货近月合约 hf_OIL / hf_CL 为主；失败时用 FRED 现货价
     （FRED 在 GitHub Actions 上访问超时，现货价也通常滞后数个交易日）。
 """
@@ -33,6 +35,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT / "data" / "market-details.json"
+DAILY_MOVES_FILE = ROOT / "data" / "daily-moves.json"
 BEIJING = timezone(timedelta(hours=8))
 UA = {"User-Agent": "Mozilla/5.0 (yuanjian-allocation data updater)"}
 
@@ -655,9 +658,89 @@ def market_observations(markets, history):
     return result, ("；".join(context) + "。", csi_month_pct)
 
 
+# ---------------------------------------------------------------- 组合页：境内 ETF 当日涨跌
+# 和 A 股同一时间收盘、人民币计价、已包含汇率影响，不用处理时差和换汇。
+# 资产类别对应关系在 app.js（DAILY_IMPACT_MAP）：中国权益 = 70% 沪深300ETF + 30% 恒生ETF，现金按 0%。
+DAILY_ETFS = [
+    ("510300", "sh510300", "沪深300ETF"),
+    ("159920", "sz159920", "恒生ETF"),
+    ("511010", "sh511010", "国债ETF"),
+    ("513500", "sh513500", "标普500ETF"),
+    ("518880", "sh518880", "黄金ETF"),
+    ("160140", "sz160140", "美国REIT"),
+]
+ETF_DAILY_LIMIT = 10.5  # 境内 ETF / LOF 单日涨跌幅限制为 10%，超过即判定数据异常
+
+
+def fetch_etf_moves():
+    text = http_get("https://qt.gtimg.cn/q=" + ",".join(code for _, code, _ in DAILY_ETFS), encoding="gbk")
+    fields_by_code = {}
+    for line in text.split(";"):
+        if "=" in line:
+            name, _, raw = line.strip().partition("=")
+            fields_by_code[name.removeprefix("v_")] = raw.strip('"').split("~")
+    out = {}
+    for symbol, code, name in DAILY_ETFS:
+        f = fields_by_code.get(code)
+        if not f or len(f) < 33 or not f[3] or not f[4]:
+            continue
+        price, prev = float(f[3]), float(f[4])
+        if price <= 0 or prev <= 0:
+            continue
+        digits = "".join(ch for ch in f[30] if ch.isdigit())[:8]
+        out[symbol] = {"code": symbol, "name": name, "price": price, "prevClose": prev,
+                       "changePct": round((price / prev - 1) * 100, 3),
+                       "date": f"{digits[:4]}-{digits[4:6]}-{digits[6:8]}"}
+    return out
+
+
+def update_daily_moves(now, check_only):
+    """整份快照要么全部更新，要么保留上一个交易日：任一只缺失、异常或日期不一致都不写入。"""
+    old = {}
+    if DAILY_MOVES_FILE.exists():
+        old = json.loads(DAILY_MOVES_FILE.read_text(encoding="utf-8"))
+    old_by_code = {item["code"]: item for item in old.get("etfs", [])}
+    try:
+        moves = fetch_etf_moves()
+    except Exception as error:  # noqa: BLE001
+        log(f"[etf] 失败，保留上一个交易日的数据：{error}")
+        return False
+    log(f"[etf] {moves}")
+    if len(moves) != len(DAILY_ETFS):
+        log(f"[etf] 只取到 {len(moves)} 只，保留上一个交易日的数据")
+        return False
+    dates = {item["date"] for item in moves.values()}
+    if len(dates) != 1:
+        log(f"[etf] 交易日期不一致 {dates}，保留上一个交易日的数据")
+        return False
+    date = dates.pop()
+    if old.get("date") and date <= old["date"]:
+        log(f"[etf] 交易日 {date} 没有新数据（休市或尚未收盘），保留上一个交易日")
+        return False
+    for symbol, item in moves.items():
+        previous = old_by_code.get(symbol)
+        if abs(item["changePct"]) > ETF_DAILY_LIMIT or (previous and not sane(previous["price"], item["price"], "index")):
+            log(f"[etf] {item['name']} 涨跌幅 {item['changePct']}% 或价格变化异常，整份不写入")
+            return False
+    snapshot = {
+        "date": date,
+        "updatedAt": f"{now:%Y-%m-%d %H:%M}",
+        "timezone": "北京时间",
+        "source": "腾讯行情：境内 ETF 收盘价与前收盘价",
+        "etfs": [{k: v for k, v in moves[symbol].items() if k != "date"} for symbol, _, _ in DAILY_ETFS],
+    }
+    if check_only:
+        log(f"[--check] daily-moves.json 将更新为 {date}（未写入文件）")
+        return True
+    DAILY_MOVES_FILE.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    log(f"已更新：组合页当日涨跌（{date}）")
+    return True
+
+
 # ---------------------------------------------------------------- 主流程
 def main():
     check_only = "--check" in sys.argv
+    update_daily_moves(datetime.now(BEIJING), check_only)  # 独立文件，和下面的行情是否变化无关
     now = datetime.now(BEIJING)
     data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
     markets = {m["id"]: m for m in data["markets"]}

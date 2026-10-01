@@ -33,8 +33,15 @@
    - 历史数据每次运行时现取（腾讯日线、外汇交易中心 CcprHisNew 分页且范围须小于一年、美国财政部 CSV、新浪原油日线），不另存文件。
    - market-details.json 顶层新增 `marketContext`（当天数据句子，纯文字）和 `marketContextCsi300Change20d`（沪深 300 近 20 日涨跌幅），
      由 update_market.py 生成。marketContext 必须保持字符串：浏览器可能缓存旧版 app.js，改成对象会显示 [object Object]。
-     API 不覆盖。组合页“今天的行情会改变这个比例吗？”由 app.js renderMarketContext 结合用户答案（期限、应急金、可承受跌幅、
-     画像的压力情景和复核规则）列出三条“为什么不会”的理由；缺失时只列数字。
+     目前页面只用 marketContextCsi300Change20d（组合页“为什么不用因此调整比例”第 2 条）；marketContext 文字暂未展示。
+   - 组合页“最近一个交易日，你的组合大约涨跌多少”（2026-10-02 起，替代原“今天的行情会改变这个比例吗？”折叠栏）：
+     · 数据：update_market.py 的 update_daily_moves 抓 6 只境内 ETF（510300 / 159920 / 511010 / 513500 / 518880 / 160140）
+       写入 data/daily-moves.json（date + etfs[code, name, price, prevClose, changePct]）。整份快照要么全部更新，要么保留上一个交易日：
+       任一只缺失、日期不一致、涨跌幅超过 10.5% 或价格较上次变化超过 SANITY["index"] 都不写入。
+     · 计算：app.js DAILY_IMPACT_MAP——中国权益 = 70% 沪深300ETF + 30% 恒生ETF，债券 = 国债ETF，全球权益 = 标普500ETF，
+       REITs = 美国REIT，黄金 = 黄金ETF，现金 0%；组合涨跌 = 用户比例 × 对应涨跌幅之和。
+     · 卡片下方“为什么不用因此调整比例”三条理由由 renderImpactReasons 结合用户答案生成；沪深 300 近 20 日跌幅与压力区间对比分
+       “小于 / 进入 / 超过区间”三种，上涨单独说明。统计事件 track('组合', '查看当日影响', 画像名)，卡片进入视野时上报一次。
    - 首页：news.json 的 updatedAt 距今超过 3 天，标题自动改为「最近观察」「近期主线」并显示消息日期范围（app.js loadNews）。
 2. （可选，会产生 API 费用，目前不启用）设置 `ANTHROPIC_API_KEY` 后运行 `python scripts/update_commentary.py --check`，检查生成的新闻和解读质量、链接真实性。
 3. ✅ 2026-10-01 已上线：仓库 https://github.com/Devin221333/yuanjian-site （公开），工作流已手动跑通并自动提交数据。
