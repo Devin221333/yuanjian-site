@@ -152,7 +152,9 @@ def fetch_treasury_10y(today):
 
 def fetch_fred(series_id):
     """圣路易斯联储 FRED 公开 CSV，无需密钥；油价通常滞后几个交易日。"""
-    text = http_get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}")
+    # 只取最近 45 天，避免下载几十年的全部历史（在 GitHub Actions 上会超时）
+    start = (datetime.now(BEIJING) - timedelta(days=45)).strftime("%Y-%m-%d")
+    text = http_get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}&cosd={start}", timeout=40)
     rows = [r for r in csv.reader(io.StringIO(text))][1:]
     rows = [r for r in rows if len(r) == 2 and r[1] not in ("", ".")]
     date, value = rows[-1]
