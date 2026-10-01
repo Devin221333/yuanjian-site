@@ -28,7 +28,11 @@
    - 美国财政部收益率 CSV、外汇交易中心 ccpr.json（字段 vrtEName / price 已确认）正常；油价见第 3 条。
    - 收盘日期取自行情返回的时间，不再用运行当天；数值没变的项不算更新，休市日不会产生空提交。
    - 免费模式：update_market.py 按当天数字用模板重写各市场 summary（只写点位、涨跌幅、成交额、汇率变化等客观事实，不做判断和预测），
-     signals 固定为 refresh_summaries 里的通用阅读提示；update_commentary.py 运行成功时会覆盖这两项。
+     signals 是按数据判断得出的 3 条观察（market_observations：连续涨跌、近 20 个交易日累计变化、近一年位置、成交额变化、
+     指数是否同向），数据不足时用 EVERGREEN_SIGNALS 通用阅读提示补足；update_commentary.py 运行成功时会覆盖 summary 和 signals。
+   - 历史数据每次运行时现取（腾讯日线、外汇交易中心 CcprHisNew 分页且范围须小于一年、美国财政部 CSV、新浪原油日线），不另存文件。
+   - market-details.json 顶层新增 `marketContext`：组合页“今天的行情会改变这个比例吗？”用的一段话，由 update_market.py 按数据生成，
+     API 不覆盖；app.js renderMarketContext 读取，缺失时只列数字。
    - 首页：news.json 的 updatedAt 距今超过 3 天，标题自动改为「最近观察」「近期主线」并显示消息日期范围（app.js loadNews）。
 2. （可选，会产生 API 费用，目前不启用）设置 `ANTHROPIC_API_KEY` 后运行 `python scripts/update_commentary.py --check`，检查生成的新闻和解读质量、链接真实性。
 3. ✅ 2026-10-01 已上线：仓库 https://github.com/Devin221333/yuanjian-site （公开），工作流已手动跑通并自动提交数据。

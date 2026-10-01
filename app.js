@@ -1581,7 +1581,10 @@
       const fx = byId.fx.headline;
       const globalRisk = byId['global-risk'].headline;
       $('#market-context-time').textContent = `${data.updatedAt} · ${data.timezone}`;
-      $('#market-rationale').innerHTML = `<strong>当前公开数据：</strong>沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。A 股内部仍有分化，海外长端利率也会影响港股科技、海外权益与 REITs 的估值；因此这组数据只提醒你分散和控制期限，不会触发追涨杀跌或自动改写战略比例。`;
+      // marketContext 由 update_market.py 按当天数据判断后生成；没有时只列数字，不写判断
+      const text = String(data.marketContext || '').replace(/^当前公开数据：/, '')
+        || `沪深 300 ${aShare.value}（${aShare.change}），${fx.label} ${fx.value}，${globalRisk.label} ${globalRisk.value}。这些是短期市场变化，只用来提醒你检查分散和期限，不会自动改写你的战略比例。`;
+      $('#market-rationale').replaceChildren(makeElement('strong', '', '当前公开数据：'), document.createTextNode(text));
     } catch (_) {
       $('#market-context-time').textContent = '数据暂不可用';
       $('#market-rationale').innerHTML = '<strong>市场环境暂未载入：</strong>你的战略比例仍由期限、现金需求和风险边界决定，不依赖某一天的行情。';

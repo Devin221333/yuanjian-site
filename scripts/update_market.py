@@ -321,9 +321,11 @@ def oil_sentence(market, label):
     return f"{label}现货报 {metric['value']}（{metric.get('note', '').split('，')[0]}）"
 
 
-def refresh_summaries(markets):
-    for market_id, signals in EVERGREEN_SIGNALS.items():
-        markets[market_id]["signals"] = [dict(signal) for signal in signals]
+def refresh_summaries(markets, history=None):
+    """summary 只写当天客观事实；signals 用按数据得出的观察（数据不足时用通用阅读提示补足）。"""
+    observations, context = market_observations(markets, history or {})
+    for market_id, signals in observations.items():
+        markets[market_id]["signals"] = signals
 
     a_share = markets["a-share"]
     a_share["summary"] = (
@@ -360,6 +362,296 @@ def refresh_summaries(markets):
     parts += [sentence for sentence in (oil_sentence(risk, "Brent 原油"), oil_sentence(risk, "WTI 原油")) if sentence]
     if parts:
         risk["summary"] = "；".join(parts) + "。"
+    return context
+
+
+# ---------------------------------------------------------------- 历史数据与按数据判断
+# 每次运行时直接取最近一年的历史行情，不另存文件；哪个源失败，相关判断就跳过。
+# 判断只依据数字（连续涨跌、近 20 个交易日累计变化、在近一年中的位置、成交额变化、指数是否同向），
+# 不解释原因、不预测方向。
+LOOKBACK = 20  # “近一个月”按 20 个交易日计算
+
+
+def fetch_history():
+    history = {}
+    for key, code in TENCENT_CODES.items():  # 腾讯日线一次只能取一个代码
+        try:
+            payload = json.loads(http_get(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,260,qfq"))
+            rows = ((payload.get("data") or {}).get(code) or {}).get("day") or []
+            history[key] = [(row[0], float(row[2])) for row in rows if len(row) > 2]
+        except Exception as error:  # noqa: BLE001
+            log(f"[history-{key}] 失败：{error}")
+    try:
+        end = datetime.now(BEIJING).date()
+        start = end - timedelta(days=360)  # 接口只允许查询一年以内
+        rows, page, pages = [], 1, 1
+        while page <= min(pages, 10):  # 接口每页最多 40 条，一年约 7 页
+            payload = json.loads(http_get(
+                "https://www.chinamoney.com.cn/ags/ms/cm-u-bk-ccpr/CcprHisNew"
+                f"?startDate={start}&endDate={end}&currency=USD/CNY&pageNum={page}&pageSize=40",
+                referer="https://www.chinamoney.com.cn/"))
+            rows += [(r["date"], float(r["values"][0])) for r in payload.get("records") or [] if r.get("values")]
+            pages = int((payload.get("data") or {}).get("pageTotal") or 1)
+            page += 1
+            time.sleep(1)
+        history["usdcny"] = sorted(set(rows))
+    except Exception as error:  # noqa: BLE001
+        log(f"[history-cfets] 失败：{error}")
+    try:
+        rows = []
+        year = datetime.now(BEIJING).year
+        for y in (year - 1, year):
+            url = ("https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+                   f"daily-treasury-rates.csv/{y}/all?type=daily_treasury_yield_curve"
+                   f"&field_tdr_date_value={y}&page&_format=csv")
+            for r in csv.DictReader(io.StringIO(http_get(url))):
+                if r.get("10 Yr"):
+                    rows.append((datetime.strptime(r["Date"], "%m/%d/%Y").date().isoformat(), float(r["10 Yr"])))
+        history["ust10y"] = sorted(rows)[-260:]
+    except Exception as error:  # noqa: BLE001
+        log(f"[history-ust] 失败：{error}")
+    for key, symbol in (("brent", "OIL"), ("wti", "CL")):
+        try:
+            text = http_get("https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20t=/"
+                            f"GlobalFuturesService.getGlobalFuturesDailyKLine?symbol={symbol}",
+                            referer="https://finance.sina.com.cn/")
+            rows = json.loads(text[text.index("(") + 1:text.rindex(")")])
+            history[key] = [(r["date"], float(r["close"])) for r in rows][-260:]
+        except Exception as error:  # noqa: BLE001
+            log(f"[history-{key}] 失败：{error}")
+    log("[history] " + "，".join(f"{k} {len(v)} 条" for k, v in history.items()))
+    return history
+
+
+def with_latest(series, date, value):
+    """历史序列末尾换成（或补上）当天最新值。"""
+    series = [row for row in (series or []) if row[0] < date]
+    return series + [(date, value)] if value is not None else series
+
+
+def streak(series):
+    """末尾连续同方向变动的天数和方向（+1 上涨 / -1 下跌）。"""
+    count, direction = 0, 0
+    for (_, prev), (_, cur) in zip(reversed(series[:-1]), reversed(series[1:])):
+        step = (cur > prev) - (cur < prev)
+        if step == 0 or (direction and step != direction):
+            break
+        direction, count = step, count + 1
+    return count, direction
+
+
+def change_over(series, days=LOOKBACK):
+    """较 days 个交易日前的变化：(起点日期, 起点值, 当前值)。"""
+    if len(series) <= days:
+        return None
+    return series[-days - 1][0], series[-days - 1][1], series[-1][1]
+
+
+def percentile(series):
+    """当前值高于近一年多少比例的交易日（0-100）。"""
+    if len(series) < 120:
+        return None
+    current = series[-1][1]
+    past = [v for _, v in series[:-1]]
+    return round(sum(v < current for v in past) / len(past) * 100)
+
+
+def level_text(level):
+    if level >= 100:
+        return "为近一年最高"
+    if level <= 0:
+        return "为近一年最低"
+    return f"高于近一年 {level}% 的交易日"
+
+
+def avg_abs_move(series, days=LOOKBACK):
+    moves = [abs(cur / prev - 1) * 100 for (_, prev), (_, cur) in zip(series[-days - 1:-1], series[-days:])]
+    return sum(moves) / len(moves) if moves else None
+
+
+def cn_date(date):
+    _, month, day = str(date)[:10].split("-")
+    return f"{int(month)} 月 {int(day)} 日"
+
+
+def signal(title, body):
+    return {"title": title, "body": body}
+
+
+def index_observations(name, series, today_pct, tip_streak, tip_month, tip_level):
+    """单个指数的按数据判断：波动幅度、连续涨跌、近 20 日累计、近一年位置。"""
+    out = []
+    avg = avg_abs_move(series[:-1]) if series else None
+    if today_pct is not None and avg and abs(today_pct) >= 1.5 and abs(today_pct) >= 2 * avg:
+        out.append(("big", signal("单日波动偏大", f"{name}{describe_move(f'{today_pct}%')}，约为近 20 个交易日平均波动幅度"
+                                              f"（{avg:.2f}%）的 {abs(today_pct) / avg:.1f} 倍。{tip_streak}")))
+    count, direction = streak(series)
+    if count >= 3:
+        start = series[-count - 1][1]
+        out.append(("streak", signal(f"连续 {count} 日{'上涨' if direction > 0 else '下跌'}",
+                                     f"{name}已连续 {count} 个交易日{'上涨' if direction > 0 else '下跌'}，"
+                                     f"累计{describe_move(f'{(series[-1][1] / start - 1) * 100}%')}。{tip_streak}")))
+    month = change_over(series)
+    if month:
+        date, start, cur = month
+        pct = (cur / start - 1) * 100
+        out.append(("month", signal(f"近 20 日{'上涨' if pct > 0 else '下跌'} {abs(pct):.1f}%",
+                                    f"{name}较 20 个交易日前（{cn_date(date)}，{start:,.2f} 点）{describe_move(f'{pct}%')}。{tip_month}")))
+    level = percentile(series)
+    if level is not None and (level >= 80 or level <= 20):
+        out.append(("level", signal(f"处于近一年{'较高' if level >= 80 else '较低'}位置",
+                                    f"{name}当前点位{level_text(level)}。{tip_level}")))
+    return out
+
+
+def pick(candidates, order, fallback, count=3):
+    by_kind = {}
+    for kind, item in candidates:
+        by_kind.setdefault(kind, item)
+    chosen = [by_kind[kind] for kind in order if kind in by_kind][:count]
+    for item in fallback:
+        if len(chosen) >= count:
+            break
+        if all(item["title"] != c["title"] for c in chosen):
+            chosen.append(dict(item))
+    return chosen
+
+
+def turnover_pct(metric):
+    """从“1.438 万亿元 / 较前一交易日 +286 亿元”算出成交额变化百分比。"""
+    if not metric or not metric.get("change", "").startswith("较"):
+        return None
+    value, diff = parse_num(metric["value"]), parse_num(metric["change"].split("日", 1)[1])
+    if value is None or diff is None:
+        return None
+    value *= 1e4 if "万亿" in metric["value"] else 1
+    return diff / (value - diff) * 100 if value - diff else None
+
+
+def market_observations(markets, history):
+    """返回 {market_id: [signal...]} 和组合页用的一句话。"""
+    result, context = {}, []
+    a_share, hk, fx, risk = markets["a-share"], markets["hong-kong"], markets["fx"], markets["global-risk"]
+
+    # ---- A 股
+    names = {"沪深 300": "csi300", "上证指数": "sse", "深证成指": "szse"}
+    pcts = {label: parse_num(metric_change(a_share, label)) for label in names}
+    date = a_share["headline"]["asOf"].split(" ")[0]
+    csi = with_latest(history.get("csi300"), date, parse_num(metric_value(a_share, "沪深 300")))
+    cands = index_observations("沪深 300 ", csi, pcts["沪深 300"],
+                               "连续或单日的涨跌并不预示下一天的方向。",
+                               "一个月内的涨跌在 A 股很常见，长期配置更看估值、盈利和自己能承受的回撤。",
+                               "点位高低不等于贵或便宜，还要结合盈利和估值看。")
+    ups = [k for k, v in pcts.items() if v and v > 0]
+    downs = [k for k, v in pcts.items() if v and v < 0]
+    if pcts and all(v is not None for v in pcts.values()):
+        if len(ups) == 3 or len(downs) == 3:
+            cands.append(("same", signal(f"三大指数同步{'上涨' if ups else '下跌'}",
+                                         f"沪深 300、上证指数和深证成指同步{'上涨' if ups else '下跌'}，"
+                                         f"涨跌幅在 {min(pcts.values()):+.2f}% 到 {max(pcts.values()):+.2f}% 之间。不同指数覆盖的公司不同，同向时说明大中小盘表现较一致。")))
+        else:
+            cands.append(("same", signal("主要指数涨跌不一",
+                                         f"{'、'.join(ups) or '没有指数'}上涨，{'、'.join(downs) or '没有指数'}下跌。不同指数覆盖的公司不同，看整个市场要多看几个。")))
+    turnover = turnover_pct(find_metric(a_share, "沪深成交额"))
+    if turnover is not None and abs(turnover) >= 10:
+        cands.append(("turnover", signal(f"成交额{'放大' if turnover > 0 else '缩小'} {abs(turnover):.0f}%",
+                                         f"沪深两市成交额 {metric_value(a_share, '沪深成交额')}，较前一交易日{'增加' if turnover > 0 else '减少'} "
+                                         f"{abs(turnover):.0f}%。成交额反映交易活跃程度，本身不是买卖信号。")))
+    result["a-share"] = pick(cands, ("big", "streak", "turnover", "same", "month", "level"), EVERGREEN_SIGNALS["a-share"])
+    month = change_over(csi)
+    a_text = f"沪深 300 {metric_value(a_share, '沪深 300')}（{metric_change(a_share, '沪深 300')}）"
+    if month:
+        a_text += f"，近 20 个交易日{describe_move(f'{(month[2] / month[1] - 1) * 100}%')}"
+    context.append(a_text)
+
+    # ---- 港股
+    date = hk["headline"]["asOf"].split(" ")[0]
+    tech = with_latest(history.get("hstech"), date, parse_num(metric_value(hk, "恒生科技")))
+    hsi = with_latest(history.get("hsi"), date, parse_num(metric_value(hk, "恒生指数")))
+    tech_pct, hsi_pct = parse_num(metric_change(hk, "恒生科技")), parse_num(metric_change(hk, "恒生指数"))
+    cands = index_observations("恒生科技指数", tech, tech_pct,
+                               "连续或单日的涨跌并不预示下一天的方向。",
+                               "科技指数的月度波动通常大于恒指，配置时要按更高的波动来预期。",
+                               "点位高低不等于贵或便宜，还要结合盈利和估值看。")
+    if tech_pct is not None and hsi_pct is not None and abs(tech_pct - hsi_pct) >= 1:
+        cands.append(("gap", signal("科技与恒指差距较大",
+                                    f"恒生科技指数{describe_move(f'{tech_pct}%')}，恒生指数{describe_move(f'{hsi_pct}%')}，"
+                                    f"相差 {abs(tech_pct - hsi_pct):.2f} 个百分点。科技公司对海外利率和情绪更敏感。")))
+    hsi_month, tech_month = change_over(hsi), change_over(tech)
+    if hsi_month and tech_month:
+        h, t = (hsi_month[2] / hsi_month[1] - 1) * 100, (tech_month[2] / tech_month[1] - 1) * 100
+        cands.append(("month", signal("近 20 日对比",
+                                      f"近 20 个交易日，恒生指数{describe_move(f'{h}%')}，恒生科技指数{describe_move(f'{t}%')}。"
+                                      "科技指数的波动通常大于恒指，配置时要按更高的波动来预期。")))
+    result["hong-kong"] = pick(cands, ("big", "streak", "gap", "month", "level"), EVERGREEN_SIGNALS["hong-kong"])
+
+    # ---- 人民币
+    today = parse_num(metric_value(fx, "今日中间价"))
+    date = fx["headline"]["asOf"].split(" ")[0]
+    usd = with_latest(history.get("usdcny"), date, today)
+    cands = []
+    count, direction = streak(usd)
+    if count >= 3:
+        bp = round((usd[-1][1] - usd[-count - 1][1]) * 10000)
+        cands.append(("streak", signal(f"连续 {count} 日{'贬值' if direction > 0 else '升值'}",
+                                       f"人民币中间价已连续 {count} 个交易日{'贬值' if direction > 0 else '升值'}，累计 {abs(bp)} 基点。"
+                                       "USD/CNY 数值上升代表人民币贬值，下降代表升值。")))
+    month = change_over(usd)
+    fx_text = f"美元兑人民币中间价 {metric_value(fx, '今日中间价')}"
+    if month:
+        bp = round((month[2] - month[1]) * 10000)
+        word = "贬值" if bp > 0 else "升值"
+        cands.append(("month", signal(f"近 20 日{word} {abs(bp)} 基点" if bp else "近 20 日基本持平",
+                                      f"中间价较 20 个交易日前（{cn_date(month[0])}，{month[1]:.4f}）"
+                                      f"{'上调' if bp > 0 else '下调'} {abs(bp)} 基点。汇率变化会影响未对冲海外资产换算成人民币后的收益。")))
+        if bp:
+            fx_text += f"，近 20 个交易日人民币{word} {abs(bp)} 基点"
+    level = percentile(usd)
+    if level is not None and (level >= 80 or level <= 20):
+        cands.append(("level", signal(f"人民币近一年{'偏弱' if level >= 80 else '偏强'}",
+                                      f"当前美元兑人民币中间价{level_text(level)}；这个数值越低，代表人民币越强。汇率长期走势难以预测，海外资产比例不宜按汇率高低来调整。")))
+    result["fx"] = pick(cands, ("streak", "month", "level"), EVERGREEN_SIGNALS["fx"])
+    context.append(fx_text)
+
+    # ---- 美债与油价
+    cands = []
+    ust_value = parse_num(metric_value(risk, "美国 10 年期收益率"))
+    ust = with_latest(history.get("ust10y"), risk["headline"]["asOf"][:10], ust_value)
+    ust_text = f"美国 10 年期国债收益率 {metric_value(risk, '美国 10 年期收益率')}"
+    if len(ust) >= 2:
+        day_bp = round((ust[-1][1] - ust[-2][1]) * 100)
+        month = change_over(ust)
+        body = f"10 年期美债收益率较前一交易日{'上升' if day_bp > 0 else '下降' if day_bp < 0 else '持平'}"
+        body += f" {abs(day_bp)} 个基点" if day_bp else ""
+        title = "美债收益率变化"
+        if month:
+            month_bp = round((month[2] - month[1]) * 100)
+            body += f"，较 20 个交易日前（{month[1]:.2f}%）{'上升' if month_bp > 0 else '下降'} {abs(month_bp)} 个基点"
+            title = f"美债收益率月{'升' if month_bp > 0 else '降'} {abs(month_bp)} 基点" if month_bp else "美债收益率月内持平"
+            if month_bp:
+                ust_text += f"，较一个月前{'上升' if month_bp > 0 else '下降'} {abs(month_bp)} 个基点"
+        cands.append(("ust", signal(title, body + "。长期利率变化会影响股票、REITs 和债券的估值。")))
+    level = percentile(ust)
+    if level is not None and (level >= 80 or level <= 20):
+        cands.append(("ust-level", signal(f"美债收益率近一年{'偏高' if level >= 80 else '偏低'}",
+                                          f"当前 10 年期美债收益率{level_text(level)}。利率水平描述的是环境，不能单独用来判断股市涨跌。")))
+    brent = history.get("brent") or []  # 新浪日线最后一行即当前交易日，与卡片上的最新价基本一致
+    month = change_over(brent)
+    if month:
+        pct = (month[2] / month[1] - 1) * 100
+        cands.append(("oil", signal(f"Brent 近 20 日{'上涨' if pct > 0 else '下跌'} {abs(pct):.1f}%",
+                                    f"Brent 原油期货较 20 个交易日前（${month[1]:.2f}）{describe_move(f'{pct}%')}。"
+                                    "油价变化会传导到运输、制造与生活成本，进而影响通胀和利率预期。")))
+    level = percentile(brent)
+    if level is not None and (level >= 80 or level <= 20):
+        cands.append(("oil-level", signal(f"油价近一年{'偏高' if level >= 80 else '偏低'}",
+                                          f"当前 Brent 原油价格{level_text(level)}。能源价格波动大，不能单独用来判断股市涨跌。")))
+    result["global-risk"] = pick(cands, ("ust", "oil", "ust-level", "oil-level"), EVERGREEN_SIGNALS["global-risk"])
+    context.append(ust_text)
+
+    note = ("当前公开数据：" + "；".join(context) + "。"
+            "这些是短期市场变化，只用来提醒你检查分散和期限，不会自动改写你的战略比例。")
+    return result, note
 
 
 # ---------------------------------------------------------------- 主流程
@@ -477,7 +769,7 @@ def main():
     if not changed:
         log("没有任何数据更新（可能是休市日或数据源全部失败），不写文件。")
         return 0
-    refresh_summaries(markets)
+    data["marketContext"] = refresh_summaries(markets, fetch_history())
     data.pop("commentaryUpdatedAt", None)  # 文字已是按今天数字生成的模板，旧的“解读更新于”日期不再适用
     data["updatedAt"] = f"{now:%Y-%m-%d %H:%M}"
     data["timezone"] = "北京时间"
