@@ -11,7 +11,7 @@
 - `data/*.json`：全部内容数据。页面通过 `fetch('data/xxx.json')` 读取。
 - `scripts/update_market.py`：每日抓行情数字写入 data/market-details.json（只用标准库）。
 - `scripts/update_commentary.py`：调用 Claude API（带 web search）生成首页新闻 data/news.json 和各市场文字解读。
-- `.github/workflows/daily-update.yml`：工作日北京时间 16:40 自动运行上面两个脚本并提交。
+- `.github/workflows/daily-update.yml`：工作日北京时间 16:40 自动运行上面两个脚本并提交；18:10 再跑一次作为备用（GitHub 定时任务偶尔漏跑）。
 
 ## 必须遵守的规则
 - **电脑端和手机端都要改，而且布局要按各自的使用习惯分别设计**，不是简单缩小。断点：`max-width: 900px` 为手机端。

@@ -6,10 +6,16 @@ name: 每日数据更新
 on:
   schedule:
     - cron: "40 8 * * 1-5"   # UTC 08:40 = 北京时间 16:40，周一到周五
+    - cron: "10 10 * * 1-5"  # 备用：UTC 10:10 = 北京时间 18:10。GitHub 定时任务偶尔漏跑；数据没变时不会提交，多跑一次没有副作用
   workflow_dispatch: {}      # 允许在 GitHub 网页上手动点“Run workflow”
 
 permissions:
   contents: write
+
+# 两次定时或手动运行撞在一起时排队执行，避免同时提交冲突
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
 
 jobs:
   update:
