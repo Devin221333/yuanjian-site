@@ -3372,3 +3372,8 @@ footer a { color: inherit; text-decoration: underline; text-underline-offset: 3p
   .contrib-row { grid-template-columns: 6.4em minmax(0, 1fr) 4em; gap: 8px; }
   .impact-why { padding: 14px; }
 }
+
+/* v29：当日涨跌卡片加“全放存款”对比条，突出“你的组合”一行 */
+.compare-row.mine .compare-label { color: var(--ink); font-weight: 700; }
+.compare-row.flat .compare-bar { background: #c3ceD7; }
+.compare-note { margin-top: -2px; color: #8193a3; font-size: .7rem; }

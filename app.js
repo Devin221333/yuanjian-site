@@ -1646,8 +1646,9 @@
       totalNode.className = toneOf(total);
 
       const maxBar = Math.max(Math.abs(csi), Math.abs(total), 0.1);
-      $('#impact-compare').replaceChildren(...[['只买沪深 300', csi], ['你的组合', total]].map(([label, value]) => {
-        const row = makeElement('div', `compare-row ${toneOf(value)}`);
+      // 三根对比条：全押 A 股 ↔ 你的组合 ↔ 全放存款（一天的利息很少，按 0% 计）
+      $('#impact-compare').replaceChildren(...[['只买沪深 300', csi], ['你的组合', total, 'mine'], ['全放存款', 0]].map(([label, value, mine]) => {
+        const row = makeElement('div', `compare-row ${toneOf(value)}${mine ? ' mine' : ''}`);
         const barTrack = makeElement('div', 'compare-track');
         const bar = makeElement('span', 'compare-bar');
         bar.style.width = `${Math.max(2, (Math.abs(value) / maxBar) * 100)}%`;
@@ -1655,6 +1656,7 @@
         row.append(makeElement('span', 'compare-label', label), barTrack, makeElement('b', '', signedPct(value)));
         return row;
       }));
+      $('#impact-compare').appendChild(makeElement('small', 'compare-note', '存款一天的利息很少，这里按 0% 计。'));
       $('#impact-verdict').textContent = dailyImpactVerdict(csi, total);
 
       const maxContribution = Math.max(...rows.map((row) => Math.abs(row.contribution)), 0.01);

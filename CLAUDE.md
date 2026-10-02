@@ -38,6 +38,7 @@
      · 数据：update_market.py 的 update_daily_moves 抓 6 只境内 ETF（510300 / 159920 / 511010 / 513500 / 518880 / 160140）
        写入 data/daily-moves.json（date + etfs[code, name, price, prevClose, changePct]）。整份快照要么全部更新，要么保留上一个交易日：
        任一只缺失、日期不一致、涨跌幅超过 10.5% 或价格较上次变化超过 SANITY["index"] 都不写入。
+     · 对比条三根：只买沪深 300、你的组合、全放存款（按 0% 计）。
      · 计算：app.js DAILY_IMPACT_MAP——中国权益 = 70% 沪深300ETF + 30% 恒生ETF，债券 = 国债ETF，全球权益 = 标普500ETF，
        REITs = 美国REIT，黄金 = 黄金ETF，现金 0%；组合涨跌 = 用户比例 × 对应涨跌幅之和。
      · 卡片下方“为什么不用因此调整比例”三条理由由 renderImpactReasons 结合用户答案生成；沪深 300 近 20 日跌幅与压力区间对比分
