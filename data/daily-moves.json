@@ -1,50 +1,50 @@
 {
-  "date": "2026-11-12",
-  "updatedAt": "2026-11-13 01:02",
+  "date": "2026-11-13",
+  "updatedAt": "2026-11-14 00:42",
   "timezone": "北京时间",
   "source": "腾讯行情：境内 ETF 收盘价与前收盘价",
   "etfs": [
     {
       "code": "510300",
       "name": "沪深300ETF",
-      "price": 4.114,
-      "prevClose": 4.15,
-      "changePct": -0.867
+      "price": 4.083,
+      "prevClose": 4.114,
+      "changePct": -0.754
     },
     {
       "code": "159920",
       "name": "恒生ETF",
-      "price": 1.409,
-      "prevClose": 1.431,
-      "changePct": -1.537
+      "price": 1.384,
+      "prevClose": 1.409,
+      "changePct": -1.774
     },
     {
       "code": "511010",
       "name": "国债ETF",
-      "price": 141.363,
-      "prevClose": 141.34,
-      "changePct": 0.016
+      "price": 141.339,
+      "prevClose": 141.363,
+      "changePct": -0.017
     },
     {
       "code": "513500",
       "name": "标普500ETF",
-      "price": 2.649,
-      "prevClose": 2.662,
-      "changePct": -0.488
+      "price": 2.663,
+      "prevClose": 2.649,
+      "changePct": 0.529
     },
     {
       "code": "518880",
       "name": "黄金ETF",
-      "price": 8.085,
-      "prevClose": 8.289,
-      "changePct": -2.461
+      "price": 7.954,
+      "prevClose": 8.085,
+      "changePct": -1.62
     },
     {
       "code": "160140",
       "name": "美国REIT",
-      "price": 1.439,
-      "prevClose": 1.441,
-      "changePct": -0.139
+      "price": 1.435,
+      "prevClose": 1.439,
+      "changePct": -0.278
     }
   ]
 }
